@@ -84,9 +84,11 @@ def runtime(tmp_path: Path):
     return rt
 
 
-def _add_open_product(rt, name: str) -> int:
+def _add_open_product(rt, name: str, site_key: str | None = "Cibo e quasi cibo/Pantry") -> int:
+    from pisaprices.storage.repos import site_categories
     with rt.sessions.begin() as session:
-        product = Product(chain="lidl", external_id=name, name=name)
+        product = Product(chain="lidl", external_id=name, name=name,
+                          source_category_id=site_categories.key_id(session, "lidl_offers", site_key) if site_key else None)
         session.add(product)
         session.flush()
         return product.id
@@ -106,6 +108,12 @@ def test_an_open_product_takes_the_category_of_products_named_alike(runtime) -> 
     assert _category_of(runtime, spaghetti) == "pasta"     # "spaghetti integrali" -> "spaghetti": all pasta
     assert _category_of(runtime, unknown) is None          # nothing named alike: not ours, no review
     assert not [r for r in open_reviews(runtime) if r["subject_id"] == unknown]
+
+
+def test_a_product_no_current_run_listed_is_left_alone(runtime) -> None:
+    stale = _add_open_product(runtime, "MARCA X Spaghetti vecchi", site_key=None)
+    place_open_products(runtime)
+    assert _category_of(runtime, stale) is None
 
 
 def test_accepting_a_category_review_sets_the_category(runtime) -> None:
@@ -133,4 +141,33 @@ def test_a_catalog_product_is_placed_only_among_its_site_category_candidates(run
     # named alike: pasta; but Conad listed it under "0404", whose only candidate is milk -> a person decides
     assert _category_of(runtime, product_id) is None
     [item] = [r for r in open_reviews(runtime) if r["subject_id"] == product_id]
-    assert item["payload"]["suggestion"] == "milk" and item["payload"]["candidates"] == ["milk"]
+    assert item["payload"]["suggestion"] is None and item["payload"]["candidates"] == ["milk"]   # no guess offered
+
+
+def test_among_a_catalog_category_candidates_the_most_named_alike_wins(runtime) -> None:
+    from pisaprices.storage.repos import site_categories
+    with runtime.sessions.begin() as session:
+        product = Product(chain="conad", external_id="x2", name="Penne integrali",
+                          source_category_id=site_categories.key_id(session, "conad_catalog", "1004"))
+        session.add(product)
+        session.flush()
+        product_id = product.id
+    place_open_products(runtime)
+    assert _category_of(runtime, product_id) == "pasta"   # one product named alike is enough here
+
+
+def test_a_title_every_candidate_excludes_is_not_ours(index) -> None:
+    assert index.is_ours(Source.COOP_CATALOG, "olio/olive", "Olio extravergine")
+    assert not index.is_ours(Source.COOP_CATALOG, "olio/olive", "Olio spray")          # the only candidate excludes it
+    assert index.is_ours(Source.CONAD_CATALOG, "0801", "Olio spray")                   # salse does not
+
+
+def test_a_proposal_disappears_once_a_later_run_places_the_product(runtime) -> None:
+    product = _add_open_product(runtime, "Prodotto senza simili")
+    with runtime.sessions.begin() as session:
+        session.add(ReviewItem(kind=ReviewKind.CATEGORY_RULE.value, subject_table="products", subject_id=product,
+                               payload={"key": f"category:{product}", "name": "x", "suggestion": None},
+                               created_at="2026-10-24T00:00:00Z"))
+        session.get(Product, product).category_id = session.scalar(select(Category.id).where(Category.slug == "pasta"))
+    place_open_products(runtime)
+    assert not [r for r in open_reviews(runtime) if r["subject_id"] == product]

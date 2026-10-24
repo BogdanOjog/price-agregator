@@ -103,7 +103,7 @@ class LidlOffers:
             return None   # not sold in the Tuscan region
         title = data.get("fullTitle") or data["title"]
         coarse = (data.get("keyfacts") or {}).get("wonCategoryPrimary", "").removeprefix(CATEGORY_PREFIX)
-        if not self.categories.is_ours(self.source, coarse):
+        if not self.categories.is_ours(self.source, coarse, title):
             return None   # not food, or a category that is not selected
 
         price_id = regions[REGION]["regionPriceId"]

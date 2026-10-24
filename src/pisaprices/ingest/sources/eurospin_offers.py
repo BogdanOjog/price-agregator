@@ -103,7 +103,7 @@ class EurospinOffers:
             title = _text(card.css_first(".product-card__title"))
             if not title:
                 raise ValueError(f"card {code} has no title (layout changed?)")
-            if not self.categories.is_ours(self.source, key):
+            if not self.categories.is_ours(self.source, key, title):
                 continue   # a category that is not selected
             category = self.categories.classify(self.source, key, title)
             product, promotion = self._card(card, code, title, category, key, snapshot.fetched_at, observed)

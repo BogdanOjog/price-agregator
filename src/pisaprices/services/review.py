@@ -54,14 +54,15 @@ def open_reviews(runtime: Runtime, kind: ReviewKind | None = None) -> list[dict]
         return repo.open_reviews(session, kind)
 
 
-def accept(runtime: Runtime, review_id: int) -> None:
+def accept(runtime: Runtime, review_id: int, category: str | None = None) -> None:
+    """For a category proposal, `category` replaces the suggested one."""
     with runtime.sessions.begin() as session:
         item = repo.decide(session, review_id, ReviewStatus.ACCEPTED, iso_utc(runtime.clock.now()))
         if item["kind"] == ReviewKind.PRODUCT_MATCH.value:
             payload = item["payload"]
             repo.link_item(session, item["subject_id"], payload["ref_key"], payload["product_id"])
         elif item["kind"] == ReviewKind.CATEGORY_RULE.value:
-            category_id = planning_repo.category_slugs(session).get(item["payload"]["suggestion"])
+            category_id = planning_repo.category_slugs(session).get(category or item["payload"].get("suggestion") or "")
             if category_id is not None:
                 classify_repo.set_category(session, item["subject_id"], category_id)
 
@@ -69,4 +70,14 @@ def accept(runtime: Runtime, review_id: int) -> None:
 def reject(runtime: Runtime, review_id: int) -> None:
     with runtime.sessions.begin() as session:
         repo.decide(session, review_id, ReviewStatus.REJECTED, iso_utc(runtime.clock.now()))
+
+
+def dismiss_all(runtime: Runtime, kind: ReviewKind | str) -> int:
+    """Mark every open item of an informational kind as seen (e.g. unit price mismatches)."""
+    now = iso_utc(runtime.clock.now())
+    with runtime.sessions.begin() as session:
+        items = repo.open_reviews(session, ReviewKind(kind))
+        for item in items:
+            repo.decide(session, item["id"], ReviewStatus.REJECTED, now)
+    return len(items)
 

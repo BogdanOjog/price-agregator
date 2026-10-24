@@ -31,6 +31,7 @@ def test_head_of_a_product_name() -> None:
     assert naming.head("Biscotti al latte", None) == ["biscotti"]
     assert naming.head("Barilla Spaghetti n.5 500 g", "BARILLA")[0] == "spaghetti"
     assert naming.display_brand("COOP -") == "Coop" and naming.display_brand("DE CECCO") == "De Cecco"
+    assert quick._fold("caffè") == "caffe"   # a typed word that names a category picks it
 
 
 def test_a_brand_restricts_the_plan(runtime) -> None:

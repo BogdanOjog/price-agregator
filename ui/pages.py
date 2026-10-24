@@ -448,22 +448,84 @@ def page_shopping() -> None:
                 st.success(f"Lista {quick.save_as_list(rt, name, drafts)} e salvată în «Liste salvate».")
 
 
+REVIEW_TITLES = {
+    "product_match": ("Oferte de legat de un produs", "Oferta pare să fie acest produs din catalog. Confirmi?"),
+    "unknown_promo": ("Oferte pe care nu le înțeleg", "Textul ofertei nu se potrivește cu niciun tip cunoscut; nu e folosită în calcul."),
+    "tiered_incremental": ("Oferte în trepte neclare", "Nu e clar dacă reducerea se aplică tuturor bucăților; nu e folosită în calcul."),
+    "canonical": ("Produse echivalente de confirmat", "Produse din lanțuri diferite propuse ca echivalente."),
+}
+PAGE = 15
+
+
+def _leaf_choices(root) -> dict[str, str]:
+    all_categories = configuration.categories(root)
+    names = {c["slug"]: c["name"] for c in all_categories}
+    return {c["slug"]: f"{names.get(c['parent'], '')} › {c['name']}" if c["parent"] else c["name"]
+            for c in all_categories if c["selected"]}
+
+
+def _category_reviews(rt, items: list[dict]) -> None:
+    st.subheader(f"Produse de încadrat ({len(items)})")
+    st.caption("Aplicația propune o categorie după produsele cu nume asemănător. Confirmă sau alege alta; "
+               "«Nu e de colectat» îl scoate din calcul.")
+    choices = _leaf_choices(rt.root)
+    for item in items[:PAGE]:
+        payload = item["payload"]
+        candidates = [c for c in (payload.get("candidates") or choices) if c in choices]
+        suggestion = payload.get("suggestion")
+        with st.container(border=True):
+            name, pick, ok, no = st.columns([4, 4, 1.4, 1.6], vertical_alignment="center")
+            name.markdown(f"**{payload.get('name', '?')}**  \n{CHAINS.get(payload.get('chain'), payload.get('chain', ''))}")
+            chosen = pick.selectbox("Categoria", candidates, format_func=choices.get, key=f"cat-{item['id']}",
+                                    index=candidates.index(suggestion) if suggestion in candidates else None,
+                                    placeholder="alege categoria", label_visibility="collapsed")
+            if ok.button("Confirmă", key=f"ok-{item['id']}", type="primary", disabled=chosen is None):
+                review.accept(rt, item["id"], chosen)
+                st.rerun()
+            if no.button("Nu e de colectat", key=f"no-{item['id']}"):
+                review.reject(rt, item["id"])
+                st.rerun()
+    if len(items) > PAGE:
+        st.caption(f"Încă {len(items) - PAGE}; apar aici pe măsură ce le rezolvi pe acestea.")
+
+
 def page_review() -> None:
     rt = runtime()
     st.title("Revizuire")
+    st.caption("Aici ajung doar lucrurile pe care aplicația nu le poate decide singură.")
     items = review.open_reviews(rt)
-    st.caption(f"{len(items)} elemente deschise")
+    if not items:
+        st.success("Nimic de verificat.")
+        return
+    by_kind: dict[str, list[dict]] = {}
     for item in items:
-        payload = {k: v for k, v in item["payload"].items() if k != "key"}
-        cols = st.columns([2, 6, 1, 1])
-        cols[0].write(item["kind"])
-        cols[1].write(payload)
-        if cols[2].button("✓", key=f"ok-{item['id']}"):
-            review.accept(rt, item["id"])
-            st.rerun()
-        if cols[3].button("✕", key=f"no-{item['id']}"):
-            review.reject(rt, item["id"])
-            st.rerun()
+        by_kind.setdefault(item["kind"], []).append(item)
+
+    if "category_rule" in by_kind:
+        _category_reviews(rt, by_kind.pop("category_rule"))
+    mismatches = by_kind.pop("unit_price_mismatch", [])
+    for kind, group in by_kind.items():
+        title, help_text = REVIEW_TITLES.get(kind, (kind, ""))
+        st.subheader(f"{title} ({len(group)})")
+        st.caption(help_text)
+        for item in group[:PAGE]:
+            payload = item["payload"]
+            text = payload.get("ref_name") or payload.get("raw_text") or payload.get("name") or ""
+            cols = st.columns([8, 1.4, 1.6], vertical_alignment="center")
+            cols[0].write(text)
+            if cols[1].button("Confirmă", key=f"ok-{item['id']}"):
+                review.accept(rt, item["id"])
+                st.rerun()
+            if cols[2].button("Respinge", key=f"no-{item['id']}"):
+                review.reject(rt, item["id"])
+                st.rerun()
+    if mismatches:
+        with st.expander(f"Prețul pe kg al site-ului diferă de cel calculat ({len(mismatches)})"):
+            st.caption("De obicei conserve: site-ul calculează pe greutatea scursă, care nu apare în nume. "
+                       "Prețurile se folosesc oricum; e doar o informare.")
+            if st.button("Am înțeles, ascunde-le"):
+                review.dismiss_all(rt, "unit_price_mismatch")
+                st.rerun()
 
 
 def page_settings() -> None:

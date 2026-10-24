@@ -55,3 +55,25 @@ def test_shopping_flow_from_text_to_plan(project: Path, monkeypatch) -> None:
     next(b for b in app.button if b.label == "Recalculează").click().run()
     assert not app.exception, [e.message for e in app.exception]
     assert any("🛒" in s.value for s in app.subheader)
+
+
+def test_a_category_proposal_is_confirmed_from_the_review_page(project: Path, monkeypatch) -> None:
+    import sqlite3
+    db = sqlite3.connect(project / "data" / "test.db")
+    product_id = db.execute("select id from products where category_id is not null limit 1").fetchone()[0]
+    db.execute("update products set category_id = null where id = ?", (product_id,))
+    db.execute("insert into review_items (kind, subject_table, subject_id, payload, status, created_at) values "
+               "('category_rule', 'products', ?, ?, 'open', '2026-10-24T00:00:00Z')",
+               (product_id, f'{{"key": "category:{product_id}", "name": "Prodotto di prova", "chain": "coop", "suggestion": "pasta"}}'))
+    db.commit()
+    db.close()
+    monkeypatch.setenv("PISAPRICES_HOME", str(project))
+    script = f"import sys\nsys.path.insert(0, {str(UI)!r})\nimport pages\npages.runtime.clear()\npages.page_review()\n"
+    app = AppTest.from_string(script, default_timeout=60).run()
+    assert any("Produse de încadrat" in s.value for s in app.subheader)
+    next(b for b in app.button if b.label == "Confirmă").click().run()
+    assert not app.exception, [e.message for e in app.exception]
+    db = sqlite3.connect(project / "data" / "test.db")
+    assert db.execute("select c.slug from products p join categories c on c.id = p.category_id where p.id = ?",
+                      (product_id,)).fetchone() == ("pasta",)
+    db.close()

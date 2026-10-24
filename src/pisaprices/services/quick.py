@@ -7,6 +7,7 @@ match "Penne farina di ceci". Without a quantity, the most common pack of the ma
 used. The guess is shown to the user, who can correct it, and can ask for a brand."""
 
 import re
+import unicodedata
 from collections import Counter
 from dataclasses import dataclass, field
 from datetime import date
@@ -58,6 +59,11 @@ def _bare_count(line: str) -> int | None:
     return int(match.group(1) or match.group(2))
 
 
+def _fold(word: str) -> str:
+    """'caffè' -> 'caffe', to compare with category slugs."""
+    return unicodedata.normalize("NFKD", word).encode("ascii", "ignore").decode()
+
+
 def interpret(runtime: Runtime, text: str) -> list[Draft]:
     selected = {c.slug for c in runtime.config.selected_categories()}
     category_tokens = {t for slug in selected for t in re.findall(r"[a-z]+", slug)}
@@ -77,7 +83,9 @@ def interpret(runtime: Runtime, text: str) -> list[Draft]:
                 if naming_words and len(naming_words) < len(words):
                     rows, _ = naming.named_alike(session, [w for w in words if w not in naming_words])
             votes = located.votes(rows)
-            category = votes.most_common(1)[0][0] if votes else None
+            # "caffè" means the Caffè category, even if most products named "Caffè ..." are capsules
+            named = [slug for slug in votes if _fold(words[0]) in re.findall(r"[a-z]+", slug)]
+            category = max(named, key=votes.get) if named else votes.most_common(1)[0][0] if votes else None
             in_category = [r for r in rows if located.slug(r["category_id"]) == category] if category else []
             if category:   # "pasta", "latte", "olio": the category already says it, keep only the other words
                 tokens = set(re.findall(r"[a-z]+", category))

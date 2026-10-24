@@ -55,3 +55,14 @@ def decide(session: Session, review_id: int, status: ReviewStatus, decided_at: s
 def keys_of_kind(session: Session, kind: ReviewKind) -> set[str]:
     """Keys of every review item of this kind, open or decided."""
     return {item.payload.get("key") for item in session.scalars(select(ReviewItem).where(ReviewItem.kind == kind.value))}
+
+
+def drop_settled_category_proposals(session: Session) -> int:
+    """Open category proposals whose product got a category meanwhile (a later run placed it).
+    Nobody decided them, so they are removed rather than kept as decisions."""
+    settled = session.scalars(select(ReviewItem).join(Product, Product.id == ReviewItem.subject_id).where(
+        ReviewItem.kind == ReviewKind.CATEGORY_RULE.value, ReviewItem.status == ReviewStatus.OPEN.value,
+        Product.category_id.is_not(None))).all()
+    for item in settled:
+        session.delete(item)
+    return len(settled)

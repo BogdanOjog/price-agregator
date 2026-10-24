@@ -13,6 +13,7 @@
 #   4. otherwise open: decided after the run from the products named alike (services/classify.py),
 #      or sent to review when they disagree. A catalog product is placed only among the candidates
 #      of its site category; offers can go anywhere (Lidl's categories are noisy).
+# A title that every candidate excludes is not ours: the product is dropped, without review.
 # title_rules: case-insensitive, matched at the start of a word ("crema" does not match
 #   "scremato"; "mel" matches "mele" and "melone").
 # review: true = mapping is an unverified proposal. Selected categories must have review: false.
@@ -99,7 +100,8 @@ categories:
   title_rules:
     include: [farina, lievito, pangrattato, pane grattugiato, semola, semolino, polenta, preparato per, pasta sfoglia, pasta frolla, pasta 
         brisè, pasta brise, decorazioni, codette, vanillina, fecola, amido, maizena]
-    exclude: []
+    exclude: [candelin, candela, pirottin, stampo, stampi, teglia, tortiera, carta forno, sac à poche, sac a poche, pennello, spatola, 
+        vassoio, sottotorta, pick, cannucce]
 - slug: pane_e_snack
   name: Pane e snack
   parent:
@@ -259,7 +261,8 @@ categories:
   title_rules:
     include: [grana, parmigian, pecorino, provolone, asiago, fontina, emmental, gorgonzola, taleggio, formaggio, formaggi, scamorza, 
         montasio, sottilette, edamer, gouda, cheddar, brie, camembert, groviera, caciotta, caciocavallo, provola, fontal, toma, bitto, 
-        castelmagno, piave, raschera, maasdam, leerdammer, galbanino, pecorino]
+        castelmagno, piave, raschera, maasdam, leerdammer, galbanino, pecorino, fette, finette, galbanone, babybel, sfoglie, cremosini, 
+        grattugiato, scaglie]
     exclude: []
 - slug: uova
   name: Uova
@@ -611,8 +614,8 @@ categories:
     conad_catalog: ['0801']
     coop_catalog: [olio-sughi-e-condimenti/olio/olio-di-semi, olio-sughi-e-condimenti/olio/olio-di-olive]
   title_rules:
-    include: [olio]
-    exclude: [extravergine, extra vergine, evo, corpo, viso, solare, motore, spray, staccante]
+    include: [olio, friol, tuttifritti, frittura]
+    exclude: [extravergine, extra vergine, evo, corpo, viso, solare, motore, staccante]
 - slug: aceto
   name: Aceto
   parent: condimenti

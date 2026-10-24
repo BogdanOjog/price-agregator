@@ -158,6 +158,8 @@ class ConadCatalog:
 
     def _card(self, card: LexborNode, data: dict, key: str, observed_at: str, observed: date):
         code, name = str(data["code"]), data["nome"]
+        if not self.categories.is_ours(self.source, key, name):
+            return None   # excluded by the category's rules
         regular = to_cents(data.get("basePrice") or 0)
         shown = parse_eur(_text(card.css_first(".product-price"))) or regular
         if not regular:

@@ -130,6 +130,8 @@ class CoopCatalog:
         name = _text(tile.css_first(".cc-productTile__linkText"))
         if not name:
             raise ValueError(f"tile {pid} has no product name (layout changed?)")
+        if not self.categories.is_ours(self.source, key, name):
+            return None   # excluded by the category's rules ("Candeline per torta")
         link = tile.css_first("a.cc-productTile__link")
         image = tile.css_first("img.cc-tile-image")
         quantity = parse_quantity(name) or parse_quantity(_text(tile.css_first(".cc-unitQuantity")))

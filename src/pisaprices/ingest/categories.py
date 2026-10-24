@@ -47,8 +47,15 @@ class CategoryIndex:
         return [c for c in self._selected
                 if any(_covers(mapped, key) for owner in self._lineage(c) for mapped in owner.sources.get(source, []))]
 
-    def is_ours(self, source: Source, key: str | None) -> bool:
-        return bool(self.candidates(source, key))
+    def is_ours(self, source: Source, key: str | None, title: str | None = None) -> bool:
+        """The site key maps to a selected category, and (given a title) not every candidate excludes
+        it: "Candeline per torta" in Coop's baking ingredients is not food. Exclusions are decisions,
+        so such products are dropped without review."""
+        candidates = self.candidates(source, key)
+        if title is None or not candidates:
+            return bool(candidates)
+        return any(not (c.title_rules and c.title_rules.exclude) or title_matches([], c.title_rules.exclude, title)
+                   for c in candidates)
 
     def classify(self, source: Source, key: str | None, title: str) -> str | None:
         candidates = self.candidates(source, key)

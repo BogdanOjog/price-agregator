@@ -32,11 +32,9 @@ def test_weekly_pages_are_discovered_from_home() -> None:
 def test_lidl_parse(config) -> None:
     batch = build_collector(Source.LIDL_OFFERS, config, TESTS).parse(snapshot(LIDL / "week_page.html"))
     products = {p.external_id: p for p in batch.products}
-    # 9003 not sold in region 600; 9005 ("ripien") and 9006 ("cioccolato") are food of our coarse
-    # categories that the rules do not place: kept, their category decided later from similar products
-    assert set(products) == {"9001", "9002", "9004", "9005", "9006"}
+    # 9003 not sold in region 600; 9005 ("ripien") and 9006 ("cioccolato"): every candidate excludes them
+    assert set(products) == {"9001", "9002", "9004"}
     assert products["9001"].category_slug == "pasta" and products["9002"].category_slug == "milk"
-    assert products["9005"].category_slug is None and products["9006"].category_slug is None
     assert products["9002"].net_qty == 1000 and batch.prices == []   # no invented regular price
 
     promos = {p.items[0].external_id: p for p in batch.promotions}
@@ -45,7 +43,7 @@ def test_lidl_parse(config) -> None:
     assert str(promos["9001"].valid_from) == "2026-10-22"   # storeStartDate in Rome time
     assert promos["9002"].program is Program.LIDL_PLUS and str(promos["9002"].valid_from) == "2026-10-23"
     assert promos["9004"].params == {"promo_price_cents": 70} and promos["9004"].needs_review   # region 600 price, regions differ
-    assert batch.reviews == []
+    assert batch.reviews == []   # exclusions are decisions, not reviews
 
 
 def test_eurospin_parse_uses_promotion_type(config) -> None:
@@ -83,5 +81,5 @@ def test_lidl_and_eurospin_runs(tmp_path: Path) -> None:
     with rt.sessions() as session:
         assert session.scalar(select(func.count()).select_from(PriceObservation)) == 0
         assert session.scalar(select(func.count()).select_from(Product).where(Product.chain == "eurospin")) == 6
-        assert session.scalar(select(func.count()).select_from(Promotion).where(Promotion.chain == "lidl")) == 5
+        assert session.scalar(select(func.count()).select_from(Promotion).where(Promotion.chain == "lidl")) == 3
     assert {r["kind"] for r in open_reviews(rt)} == {"unknown_promo"}   # the Eurospin card without a type
