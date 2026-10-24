@@ -17,6 +17,16 @@ def upsert(session: Session, source: str, categories: dict[str, str], seen_at: s
     return len(categories)
 
 
+def key_id(session: Session, source: str, key: str) -> int:
+    """The row of a site category key, added (without a name) the first time a product carries it."""
+    row = session.scalar(select(SourceCategory).where(SourceCategory.source == source, SourceCategory.source_key == key))
+    if row is None:
+        row = SourceCategory(source=source, source_key=key)
+        session.add(row)
+        session.flush()
+    return row.id
+
+
 def listed(session: Session, source: str) -> list[dict]:
     rows = session.scalars(select(SourceCategory).where(SourceCategory.source == source).order_by(SourceCategory.source_key))
     return [{"key": r.source_key, "name": r.name, "seen": r.last_fetched_at} for r in rows]

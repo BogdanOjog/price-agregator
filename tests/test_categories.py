@@ -119,3 +119,18 @@ def test_accepting_a_category_review_sets_the_category(runtime) -> None:
     assert _category_of(runtime, product) == "milk"
     place_open_products(runtime)   # a decided review is not proposed again
     assert not [r for r in open_reviews(runtime) if r["kind"] == ReviewKind.CATEGORY_RULE.value]
+
+
+def test_a_catalog_product_is_placed_only_among_its_site_category_candidates(runtime) -> None:
+    from pisaprices.storage.repos import site_categories
+    with runtime.sessions.begin() as session:
+        product = Product(chain="conad", external_id="x1", name="Spaghetti speciali",
+                          source_category_id=site_categories.key_id(session, "conad_catalog", "0404"))
+        session.add(product)
+        session.flush()
+        product_id = product.id
+    place_open_products(runtime)
+    # named alike: pasta; but Conad listed it under "0404", whose only candidate is milk -> a person decides
+    assert _category_of(runtime, product_id) is None
+    [item] = [r for r in open_reviews(runtime) if r["subject_id"] == product_id]
+    assert item["payload"]["suggestion"] == "milk" and item["payload"]["candidates"] == ["milk"]

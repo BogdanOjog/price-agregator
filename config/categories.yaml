@@ -11,7 +11,8 @@
 #      title (before "di", "con", "al"...) and whose exclude has none anywhere;
 #   3. the single candidate without include words, if there is exactly one;
 #   4. otherwise open: decided after the run from the products named alike (services/classify.py),
-#      or sent to review when they disagree.
+#      or sent to review when they disagree. A catalog product is placed only among the candidates
+#      of its site category; offers can go anywhere (Lidl's categories are noisy).
 # title_rules: case-insensitive, matched at the start of a word ("crema" does not match
 #   "scremato"; "mel" matches "mele" and "melone").
 # review: true = mapping is an unverified proposal. Selected categories must have review: false.

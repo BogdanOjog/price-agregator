@@ -22,6 +22,7 @@ from pisaprices.ingest.snapshots import RawSnapshot, load_snapshots
 from pisaprices.services.clock import Clock, iso_utc
 from pisaprices.storage.repos import ingest as repo
 from pisaprices.storage.repos import review as review_repo
+from pisaprices.storage.repos import site_categories as site_repo
 
 class ParseError(Exception):
     """A snapshot could not be turned into valid records."""
@@ -79,7 +80,7 @@ def _parse_all(collector: Collector, snapshots: list[RawSnapshot]) -> list[Parse
     return batches
 
 
-def _persist(session: Session, run_id: int, batches: list[ParsedBatch], now: str) -> None:
+def _persist(session: Session, source: str, run_id: int, batches: list[ParsedBatch], now: str) -> None:
     stores, categories = repo.ids_by_slug(session)
 
     def store_id(slug: str | None) -> int | None:
@@ -94,6 +95,8 @@ def _persist(session: Session, run_id: int, batches: list[ParsedBatch], now: str
         for p in batch.products:
             fields = p.model_dump(exclude={"chain", "external_id", "source_category_key", "category_slug"})
             fields["unit"] = p.unit.value if p.unit else None
+            if p.source_category_key:   # the site's category: it limits the candidates when the title did not decide
+                fields["source_category_id"] = site_repo.key_id(session, source, p.source_category_key)
             if p.category_slug:
                 fields["category_id"] = categories.get(p.category_slug)
             # else: keep the category decided earlier from similar products or in review
@@ -147,7 +150,7 @@ def _store(runtime: Runtime, source: str, run_id: int, batches: list[ParsedBatch
     with runtime.sessions.begin() as session:
         if replace:
             repo.delete_run_rows(session, run_id)
-        _persist(session, run_id, batches, iso_utc(runtime.clock.now()))
+        _persist(session, source, run_id, batches, iso_utc(runtime.clock.now()))
         status, warnings = _judge(session, source, run_id, items, runtime.config.settings.quality.anomaly_drop_ratio)
     return status, items, warnings
 

@@ -3,7 +3,7 @@
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from pisaprices.storage.orm import CanonicalProduct, Product
+from pisaprices.storage.orm import CanonicalProduct, Product, SourceCategory
 
 
 def products_with_category(session: Session) -> list[dict]:
@@ -30,7 +30,10 @@ def set_canonical(session: Session, product_id: int, canonical: int) -> None:
 
 
 def products_without_category(session: Session) -> list[dict]:
-    rows = session.execute(select(Product.id, Product.chain, Product.name, Product.brand).where(Product.category_id.is_(None)))
+    """With the site category they were listed in (source, source_key), when known."""
+    rows = session.execute(select(Product.id, Product.chain, Product.name, Product.brand, SourceCategory.source, SourceCategory.source_key)
+                           .outerjoin(SourceCategory, SourceCategory.id == Product.source_category_id)
+                           .where(Product.category_id.is_(None)))
     return [dict(row._mapping) for row in rows]
 
 
