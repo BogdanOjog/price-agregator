@@ -10,8 +10,9 @@ Everything runs on your computer: a SQLite database, no server, no account, no A
 
 - **Collects** regular prices and promotions every day, politely (pauses between requests,
   `robots.txt` respected, no anti-bot evasion): the Coop and Conad catalogs, Lidl's whole catalog
-  through its Everli storefront (prices about 8% above the shelf, labelled as Everli prices) and
-  the weekly offers of Lidl and Eurospin from their own sites.
+  through its Everli storefront and the weekly offers of Lidl and Eurospin from their own sites.
+  Everli's prices are about 8% above the shelf: the app shows and plans with the estimated shelf
+  price (`price_markup_pct` in `config/stores.yaml`), labelled as an estimate.
 - **Catalog**: browse a category, search, see a product's price at each store with the date it was
   seen, its active promotions and their end dates, its price history and the equivalent products
   of the other chains.

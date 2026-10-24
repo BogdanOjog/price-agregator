@@ -26,6 +26,14 @@ def unit_price(price_cents: int, quantity: Quantity) -> float:
     return float(per_unit.quantize(Decimal("0.001"), rounding=ROUND_HALF_UP))
 
 
+def shelf_estimate(price_cents: int, markup_pct: float | None) -> int:
+    """The shelf price behind a price that carries a known markup (Everli: about 8%), to the cent."""
+    if not markup_pct:
+        return price_cents
+    value = Decimal(price_cents) / (1 + Decimal(str(markup_pct)) / 100)
+    return int(value.quantize(Decimal(1), rounding=ROUND_HALF_UP))
+
+
 def cost_for_amount(price_per_display_unit_cents: int, amount: float, unit: Unit) -> int:
     """Cost of `amount` base units sold by weight or volume, rounded to the cent (variable-weight items)."""
     value = Decimal(price_per_display_unit_cents) * Decimal(str(amount)) / PER_DISPLAY_UNIT[unit]

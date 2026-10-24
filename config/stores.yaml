@@ -51,8 +51,9 @@ stores:
     cap: "56010"
     external_id: "5390"         # store id Everli assigns to this address (/api/config)
     source_mode: catalog
-    visitable: false            # data source only: Everli's prices may include its markup
+    visitable: false            # data source only: Everli's prices include its markup
     outside_scope_approved: true
+    price_markup_pct: 8         # measured 2026-10-24 against lidl.it former prices (recon/NOTES.md); check at the shelf
     everli_address: {street: Via Lorenzo il Magnifico, street_number: "24", postal_code: "56010",
                      city: San Giuliano Terme, lat: 43.7220276, lng: 10.4281323}
 

@@ -4,6 +4,8 @@ import json
 from dataclasses import dataclass, field
 from datetime import date, timedelta
 
+from pisaprices.config.schemas import StoreConfig
+from pisaprices.domain.money import shelf_estimate
 from pisaprices.ingest.dates import rome_date
 from pisaprices.services.collect import Runtime
 from pisaprices.storage.repos import catalog as repo
@@ -69,9 +71,29 @@ def today(runtime: Runtime) -> date:
     return rome_date(runtime.clock.now())
 
 
+def price_label(source: StoreConfig) -> str:
+    """Where a data-only store's price comes from: "preț online Coop Cascina (punto di ritiro)", or,
+    for a source with a known markup, "estimat la raft: Lidl Ghezzano (Everli) −8%"."""
+    if source.price_markup_pct:
+        return f"estimat la raft: {source.name} −{source.price_markup_pct:g}%"
+    return f"preț online {source.name}"
+
+
 def _labels(runtime: Runtime) -> dict[str, str]:
     """Visitable stores by name; data-only stores (Cascina) say where the price comes from."""
-    return {s.slug: s.name if s.visitable else f"preț online {s.name}" for s in runtime.config.stores.stores}
+    return {s.slug: s.name if s.visitable else price_label(s) for s in runtime.config.stores.stores}
+
+
+def _shelf(runtime: Runtime, store_slug: str | None, cents: int | None, unit: float | None) -> tuple[int | None, float | None]:
+    """Estimated shelf price and unit price, for a source with a known markup (Everli)."""
+    markup = _markups(runtime).get(store_slug)
+    if not markup or cents is None:
+        return cents, unit
+    return shelf_estimate(cents, markup), (round(unit / (1 + markup / 100), 3) if unit is not None else None)
+
+
+def _markups(runtime: Runtime) -> dict[str, float]:
+    return {s.slug: s.price_markup_pct for s in runtime.config.stores.stores if s.price_markup_pct}
 
 
 def _promo_views(runtime: Runtime, promos: list[dict], day: date) -> list[PromoView]:
@@ -97,8 +119,9 @@ def _views(runtime: Runtime, session, rows: list[dict], day: date) -> list[Produ
     horizon = (day - timedelta(days=max_age)).isoformat()
     prices: dict[int, list[StorePrice]] = {}
     for p in repo.current_prices(session, [r["id"] for r in rows]):
+        cents, unit = _shelf(runtime, p["store_slug"], p["price_cents"], p["unit_price"])
         prices.setdefault(p["product_id"], []).append(StorePrice(
-            p["store_slug"], labels.get(p["store_slug"], p["store_slug"]), p["price_cents"], p["unit_price"],
+            p["store_slug"], labels.get(p["store_slug"], p["store_slug"]), cents, unit,
             p["observed_at"], p["observed_at"][:10] < horizon))
     promos = _promo_views(runtime, repo.active_promotions(session, day, max_age), day)
     by_product: dict[int, list[PromoView]] = {}
@@ -142,7 +165,10 @@ def browse(runtime: Runtime, category: str, *, chain: str | None = None, promo_o
 
 def search(runtime: Runtime, words: str, limit: int = 50) -> list[dict]:
     with runtime.sessions() as session:
-        return repo.search_products(session, words, limit)
+        rows = repo.search_products(session, words, limit)
+    for row in rows:
+        row["price_cents"], row["unit_price"] = _shelf(runtime, row.get("store_slug"), row["price_cents"], row["unit_price"])
+    return rows
 
 
 @dataclass

@@ -78,6 +78,9 @@ class StoreConfig(Strict):
     price_source: Slug | None = None
     outside_scope_approved: bool = False   # outside Comune di Pisa by the user's decision
     everli_address: EverliAddress | None = None
+    # this source's prices are above the shelf by this much (%, measured): shown and planned as
+    # estimated shelf prices; the observations keep the price as seen
+    price_markup_pct: Annotated[float, Field(ge=0, lt=100)] | None = None
 
     @model_validator(mode="after")
     def _in_pisa(self) -> "StoreConfig":

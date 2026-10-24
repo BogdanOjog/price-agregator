@@ -72,3 +72,36 @@ def test_another_store_for_the_address_stops_the_run(tmp_path: Path) -> None:
     assert result.status is RunStatus.FAILED and "store 9999" in result.error and "refusing" in result.error
     with rt.sessions() as session:
         assert session.scalar(select(func.count()).select_from(PriceObservation)) == 0
+
+
+def test_shelf_estimate() -> None:
+    from pisaprices.domain.money import shelf_estimate
+    assert shelf_estimate(325, 8) == 301 and shelf_estimate(215, 8) == 199   # Patate Selenella, Mele Golden: shelf 2,99 / 1,99
+    assert shelf_estimate(89, None) == 89
+
+
+def test_catalog_and_plan_use_the_estimated_shelf_price(tmp_path: Path) -> None:
+    from datetime import date
+
+    from pisaprices.services import catalog, quick
+
+    config_dir = tmp_path / "config"
+    import shutil
+    shutil.copytree(TESTS / "config", config_dir)
+    stores = config_dir / "stores.yaml"
+    text = stores.read_text(encoding="utf-8")
+    text = text.replace('    name: Lidl A\n    cap: "56122"\n    source_mode: promo_only\n',
+                        '    name: Lidl A\n    cap: "56122"\n    source_mode: catalog\n    price_source: lidl_everli_a\n')
+    text = text.replace('    name: Lidl A (Everli)\n', '    name: Lidl A (Everli)\n    price_markup_pct: 8\n')
+    stores.write_text(text, encoding="utf-8")
+    rt = make_runtime(tmp_path, routes(SITE))
+    assert collect(rt, build_collector(Source.LIDL_EVERLI, rt.config, tmp_path)).status is RunStatus.OK
+
+    [spaghetti] = [v for v in catalog.browse(rt, "pasta", day=date(2026, 10, 24)) if v.name.startswith("Spaghetti")]
+    [price] = spaghetti.prices
+    assert price.price_cents == 82 and price.label == "estimat la raft: Lidl A (Everli) −8%"   # Everli 0,89
+
+    drafts = quick.interpret(rt, "spaghetti 500 g")
+    result = quick.plan_drafts(rt, drafts, start=date(2026, 10, 26), window_days=7)
+    [by_store] = result.matrix.values()
+    assert by_store["lidl_a"].cost_cents == 82 and by_store["lidl_a"].price_source.startswith("estimat la raft")

@@ -9,9 +9,11 @@ from pisaprices.domain.basket import Plan, StoreOption, best_plans
 from pisaprices.domain.enums import Channel, MatchMode, Mechanic, SourceMode, Transport, Unit
 from pisaprices.domain.item_cost import ItemChoice, best_choice
 from pisaprices.domain.model import Need, Offer, Product, Programs, Promo, Visit
+from pisaprices.domain.money import shelf_estimate
 from pisaprices.domain.report import PlanReport, build_reports
 from pisaprices.domain.visits import candidate_days, window
 from pisaprices.ingest.dates import rome_date
+from pisaprices.services.catalog import price_label
 from pisaprices.services.collect import Runtime
 from pisaprices.storage.repos import catalog as catalog_repo
 from pisaprices.storage.repos import planning as repo
@@ -140,7 +142,7 @@ def _inputs(runtime: Runtime, items: list[dict], start: date, days: int) -> _Inp
         for visit in visits:
             store = by_slug[visit.store]
             source = by_slug[store.price_source] if store.price_source else store
-            label = store.name if source.slug == store.slug else f"preț online {source.name}"
+            label = store.name if source.slug == store.slug else price_label(source)
             sources = {visit.store, source.slug}
             store_promos[visit.store] = [p for p in promos if p.store in sources or (p.store is None and p.chain == visit.chain)]
             if visit.promo_only:
@@ -149,7 +151,8 @@ def _inputs(runtime: Runtime, items: list[dict], start: date, days: int) -> _Inp
                 offers[visit.store] = [Offer(_product(r, parents), visit.store, None, None, store.name) for r in rows]
             else:
                 rows = repo.priced_products(session, [store_ids[source.slug]], (start - timedelta(days=max_age)).isoformat())
-                offers[visit.store] = [Offer(_product(r, parents), visit.store, r["price_cents"], r["observed_at"], label) for r in rows]
+                offers[visit.store] = [Offer(_product(r, parents), visit.store, shelf_estimate(r["price_cents"], source.price_markup_pct),
+                                             r["observed_at"], label) for r in rows]
     needs = {row["id"]: _need(row) for row in items}
     return _Inputs(needs, visits, offers, store_promos, promos)
 
