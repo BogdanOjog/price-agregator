@@ -1,0 +1,19 @@
+{"data": [
+ {"id": "900001", "store_id": "5390", "name": "Spaghetti di prova", "short_description": "confezione 0.500kg",
+  "tags": ["458", "100162", "12"], "type": "kilogram", "selling_type": "piece", "value": 0.5,
+  "price": 89, "price_per_type": 178, "discounted_price": 79, "discount": -10, "variable_weight": false,
+  "brand": "Marca Prova", "thumbnail": "https://example.invalid/spaghetti.webp"},
+ {"id": "900002", "store_id": "5390", "name": "Latte di prova intero", "short_description": "bottiglia 1l",
+  "tags": ["321", "100139", "6"], "type": "liter", "selling_type": "piece", "value": 1,
+  "price": 115, "price_per_type": 115, "discounted_price": 115, "discount": 0, "variable_weight": false,
+  "brand": "Latteria Prova"},
+ {"id": "900003", "store_id": "5390", "name": "Penne di prova sfuse", "short_description": "al kg",
+  "tags": ["459", "100162", "12"], "type": "kilogram", "selling_type": "weight", "value": 1,
+  "price": 150, "price_per_type": 300, "discounted_price": 150, "discount": 0, "variable_weight": true,
+  "brand": ""},
+ {"id": "900004", "store_id": "5390", "name": "Mele di prova", "short_description": "confezione 1kg",
+  "tags": ["252", "100112", "3"], "type": "kilogram", "selling_type": "piece", "value": 1,
+  "price": 199, "price_per_type": 199, "discounted_price": 199, "discount": 0, "variable_weight": false,
+  "brand": "Frutteto Prova"}
+], "links": {"first": "/products?take=1000&skip=0", "last": "/products?take=1000&skip=0", "prev": null, "next": null},
+ "brands": [], "banners": []}

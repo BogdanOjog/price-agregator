@@ -17,7 +17,7 @@ from pisaprices.config.schemas import AppConfig, CategoryConfig
 from pisaprices.domain.enums import Source
 from pisaprices.ingest.titles import head_end, without_brand_prefix
 
-CATALOG_SOURCES = {Source.COOP_CATALOG, Source.CONAD_CATALOG}
+CATALOG_SOURCES = {Source.COOP_CATALOG, Source.CONAD_CATALOG, Source.LIDL_EVERLI}
 
 
 def _word_start(rule: str, title: str) -> int | None:

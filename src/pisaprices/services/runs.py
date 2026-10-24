@@ -11,7 +11,8 @@ from pisaprices.services.review import ResolveReport, resolve_pending
 from pisaprices.services.sources import build_collector
 
 # catalogs first, so promotions from the other sources can link to products already stored
-ORDER = [Source.COOP_CATALOG, Source.COOP_SOCI, Source.CONAD_CATALOG, Source.LIDL_OFFERS, Source.EUROSPIN_OFFERS]
+ORDER = [Source.COOP_CATALOG, Source.COOP_SOCI, Source.CONAD_CATALOG, Source.LIDL_EVERLI, Source.LIDL_OFFERS,
+         Source.EUROSPIN_OFFERS]
 
 
 @dataclass

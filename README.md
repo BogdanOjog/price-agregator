@@ -1,6 +1,6 @@
 # price-agregator
 
-Prices and promotions of the supermarkets in Pisa (Coop, Conad, Lidl, Eurospin), a searchable
+Prices and promotions of the supermarkets around Pisa (Coop, Conad, Lidl, Eurospin), a searchable
 catalog, and a shopping planner that tells you **where, on which day and what exactly** to buy so
 a shopping list costs the least, with 1, 2 or 3 stores.
 
@@ -9,7 +9,9 @@ Everything runs on your computer: a SQLite database, no server, no account, no A
 ## What it does
 
 - **Collects** regular prices and promotions every day, politely (pauses between requests,
-  `robots.txt` respected, no anti-bot evasion).
+  `robots.txt` respected, no anti-bot evasion): the Coop and Conad catalogs, Lidl's whole catalog
+  through its Everli storefront (prices about 8% above the shelf, labelled as Everli prices) and
+  the weekly offers of Lidl and Eurospin from their own sites.
 - **Catalog**: browse a category, search, see a product's price at each store with the date it was
   seen, its active promotions and their end dates, its price history and the equivalent products
   of the other chains.
@@ -17,8 +19,8 @@ Everything runs on your computer: a SQLite database, no server, no account, no A
   each store, the promotions and cards to use, and how much each extra store saves for how many
   extra minutes.
 
-The configuration is for the stores of the Comune di Pisa. Another town needs new store ids and
-some recon (see `recon/NOTES.md` and `docs/maintenance.md`).
+The configuration is for stores in and around Pisa (`config/stores.yaml`). Another town needs new
+store ids and some recon (see `recon/NOTES.md` and `docs/maintenance.md`).
 
 ## Install
 

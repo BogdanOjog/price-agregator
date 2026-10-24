@@ -124,6 +124,17 @@ Doar `httpx`, ~7 request-uri. Răspunsuri brute: `recon/out/lidl/raw/`. **Test d
 - **EAN:** absent din JSON-ul de pe grilă (`erpNumber`, `productId` sunt interne).
 - **Fixture-uri:** `tests/fixtures/lidl_offers/` (cele 3 pagini, fără `<script>`). Inventar: `recon/out/lidl/promotions_seen.json`.
 
+## Lidl prin Everli (2026-10-24)
+
+Lidl Italia nu vinde online alimente; `lidl.it/c/spesa-online` duce la vitrina Everli `lidl.everli.com`. Recon: `recon/everli_public.py` (doar pagini permise), `recon/browser_everli_lidl.py` (o singură vizită cu browserul, ca să se vadă cererile), `recon/everli_httpx.py` (același flux doar cu httpx: reușit, 3 request-uri).
+
+- **robots.txt:** `lidl.everli.com` are `Allow: /`. Site-ul general `it.everli.com` interzice `/supermercato/`, `/s?` și `/referrals/` și nu e folosit.
+- **Termeni Everli** (art. 11.2): copierea conținutului e interzisă „salvo che per uso personale e non commerciale”; proiectul e strict personal și nu publică date colectate. Art. 4.3: prețul afișat poate include „eventuala maggiorazione applicata da EVERLI”.
+- **Sesiune:** `GET /` → `GET /api/config?brand=50&postal_code=…&address=…&street_number=…&city=…&country=Italia&lat=…&lng=…` (adresa magazinului, publică) pune adresa în sesiune. Răspunsul `config.store.id` e magazinul servit: pentru Via Lorenzo il Magnifico 24, San Giuliano Terme (Ghezzano) e **5390**, chiar magazinul la care merge utilizatorul. Verificare obligatorie la fiecare rulare: alt id → rularea se oprește. Fără adresă: `{"code": "no_address"}`.
+- **Categorii:** `GET /api/tags`: 20 de categorii principale, 510 noduri (`id`, `name`, `children`, `product_sample`). Cele alimentare: 3, 1, 4, 6, 8, 12, 32, 27, 28, 10, 11, 15, 101366.
+- **Produse:** `GET /api/products?tags=<id>&take=1000&skip=N` → `data[]` + `links.next` (null = ultima pagină). Câmpuri: `id` (unic; `gdo_id` se repetă între produse), `store_id`, `name`, `short_description` („confezione 0.250kg”), `tags` (frunză, mijloc, vârf), `type` (`kilogram`…) + `value` (cantitatea), `price` și `discounted_price` în cenți, `price_per_type`, `variable_weight`, `brand`. Prima colectare: 2.032 de produse alimentare cu 15 request-uri.
+- **Adaosul Everli, măsurat:** comparând prețul vechi („prezzo barrato”) al ofertelor lidl.it cu prețul Everli al aceluiași produs, Everli e cu **~8% mai scump** (Patate Selenella 2,99 → 3,25; Mele Golden 1,99 → 2,15; Braciole di suino 4,69 → 5,09; Hamburger di bovino 5,79 → 6,25; Limoni 2,49 → 2,69). În aplicație prețurile apar ca „preț online Lidl Ghezzano (Everli)”; reducerile Everli (`discounted_price`) sunt `channel = online`.
+
 ## Eurospin (T0.5 — 2026-10-23)
 
 Doar `httpx`, ~9 request-uri (inclusiv 3 sitemap-uri). Răspunsuri brute: `recon/out/eurospin/raw/`. **Test de reproducere `httpx`: reușit** (fără cookie-uri). `/leaflet/` nu a fost atins.

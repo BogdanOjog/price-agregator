@@ -24,6 +24,7 @@ class Source(StrEnum):
     COOP_SOCI = "coop_soci"
     CONAD_CATALOG = "conad_catalog"
     LIDL_OFFERS = "lidl_offers"
+    LIDL_EVERLI = "lidl_everli"
     EUROSPIN_OFFERS = "eurospin_offers"
 
 

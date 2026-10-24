@@ -1,6 +1,8 @@
 # local data, personal config, sessions, working notes
 CLAUDE.md
 PLAN.md
+research_notes/
+reports/
 data/
 config/user.yaml
 

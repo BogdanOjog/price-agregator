@@ -37,7 +37,7 @@ def search_products(session: Session, words: str, limit: int = 50) -> list[dict]
     if not query:
         return []
     return _rows(session, """
-        SELECT p.id, p.chain, p.external_id, p.name, p.brand, p.net_qty, p.unit, p.category_id,
+        SELECT p.id, p.chain, p.external_id, p.name, p.brand, p.net_qty, p.unit, p.variable_weight, p.category_id,
                cp.price_cents, cp.unit_price, cp.observed_at, s.slug AS store_slug
         FROM products_fts f
         JOIN products p ON p.id = f.rowid

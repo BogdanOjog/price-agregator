@@ -55,7 +55,6 @@ def test_user_example_is_valid_for_project_stores(tmp_path: Path) -> None:
     "name, old, new, message",
     [
         ("stores.yaml", 'cap: "56121"', 'cap: "50100"', "outside Comune di Pisa"),
-        ("stores.yaml", "    visitable: false\n    outside_scope_approved: true", "    outside_scope_approved: true", "only be a data source"),
         ("stores.yaml", "price_source: coop_source", "price_source: conad_a", "same chain"),
         ("stores.yaml", "price_source: coop_source", "price_source: nowhere", "does not exist"),
         ("categories.yaml", "parent: dairy\n    selected: true", "parent: drinks\n    selected: true", "parent 'drinks' does not exist"),

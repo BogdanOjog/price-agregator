@@ -14,7 +14,7 @@ stores:                            # keys are the slugs in config/stores.yaml
     transport: walk
     on_route_days: []              # days the store is on a trip you make anyway, e.g. [mon, thu]
     detour_minutes: 0              # extra minutes on those days
-  lidl_aurelia_nord:
+  lidl_ghezzano:
     travel_minutes_one_way: 10
     transport: walk
     allowed_days: null             # null = any day; or e.g. [sat, sun]

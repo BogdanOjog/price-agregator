@@ -25,6 +25,14 @@ stores:
     name: Lidl A
     cap: "56122"
     source_mode: promo_only
+  - slug: lidl_everli_a
+    chain: lidl
+    name: Lidl A (Everli)
+    cap: "56122"
+    external_id: "5390"
+    source_mode: catalog
+    visitable: false
+    everli_address: {street: Via di Prova, street_number: "1", postal_code: "56122", city: Pisa, lat: 43.7, lng: 10.4}
   - slug: eurospin_a
     chain: eurospin
     name: Eurospin A

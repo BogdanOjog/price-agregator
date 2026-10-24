@@ -68,7 +68,6 @@ class Store(Base):
             f"(cap BETWEEN '{PISA_CAP_MIN}' AND '{PISA_CAP_MAX}') OR outside_scope_approved = 1",
             name="cap_in_pisa",
         ),
-        CheckConstraint("outside_scope_approved = 0 OR visitable = 0", name="outside_scope_not_visitable"),
     )
 
     id: Mapped[int] = mapped_column(primary_key=True)

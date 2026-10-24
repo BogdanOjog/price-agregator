@@ -121,12 +121,12 @@ def test_store_outside_pisa_is_rejected(engine: Engine, cap: str) -> None:
         session.commit()
 
 
-def test_approved_outside_store_must_not_be_visitable(engine: Engine) -> None:
-    with Session(engine) as session:
-        session.add(store(slug="coop_cascina", cap="56012", outside_scope_approved=True, visitable=False))
+def test_an_approved_store_outside_pisa_may_be_visited(engine: Engine) -> None:
+    with Session(engine) as session:   # Lidl Ghezzano: the user shops there (migration a3c1e7d05b92)
+        session.add(store(slug="lidl_ghezzano", cap="56010", outside_scope_approved=True, visitable=True))
         session.commit()
-    with Session(engine) as session, pytest.raises(IntegrityError, match="outside_scope_not_visitable"):
-        session.add(store(slug="coop_elsewhere", cap="56012", outside_scope_approved=True, visitable=True))
+    with Session(engine) as session, pytest.raises(IntegrityError, match="cap_in_pisa"):   # approval still required
+        session.add(store(slug="coop_elsewhere", cap="56012", outside_scope_approved=False, visitable=True))
         session.commit()
 
 
@@ -193,3 +193,33 @@ def test_current_prices_returns_latest_observation(engine: Engine) -> None:
         session.commit()
         rows = session.execute(text("SELECT price_cents FROM current_prices")).all()
         assert rows == [(119,)]
+
+
+def test_the_stores_rebuild_keeps_collected_data(tmp_path) -> None:
+    """Migration a3c1e7d05b92 rebuilds `stores`, which every table references: it must work on a full database."""
+    import sqlite3
+
+    from alembic import command
+    from alembic.config import Config
+
+    from pisaprices.services.conad_session import import_session
+    from pisaprices.services.runs import collect_sources
+    from tests.helpers import TESTS, make_runtime, routes
+    from tests.test_cli import SITE
+
+    import_session(tmp_path, (TESTS / "synthetic" / "conad_catalog" / "copied_curl.txt").read_text(encoding="utf-8"))
+    rt = make_runtime(tmp_path, routes(SITE))
+    collect_sources(rt)
+    rt.sessions.kw["bind"].dispose()
+    db = tmp_path / "db.sqlite"
+    before = sqlite3.connect(db).execute("select count(*) from price_observations").fetchone()[0]
+    config = Config(str(TESTS.parent / "alembic.ini"))
+    config.set_main_option("script_location", str(TESTS.parent / "migrations"))
+    config.attributes["db_url"] = f"sqlite:///{db.as_posix()}"
+    config.attributes["skip_logging_config"] = True
+    command.downgrade(config, "f85f9895fb8c")
+    command.upgrade(config, "head")
+    con = sqlite3.connect(db)
+    assert before > 0 and con.execute("select count(*) from price_observations").fetchone()[0] == before
+    assert con.execute("pragma foreign_key_check").fetchall() == []
+    assert not con.execute("select name from sqlite_master where name like '_alembic_tmp%'").fetchall()

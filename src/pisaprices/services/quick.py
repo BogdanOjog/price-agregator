@@ -98,7 +98,8 @@ def interpret(runtime: Runtime, text: str) -> list[Draft]:
             elif (count := _bare_count(line)) is not None:
                 quantity = f"{count} pz"
             elif in_category:
-                packs = Counter((r["net_qty"], r["unit"]) for r in in_category if r["net_qty"] and r["unit"])
+                packs = Counter((r["net_qty"], r["unit"]) for r in in_category   # sold by weight: no pack to copy
+                                if r["net_qty"] and r["unit"] and not r["variable_weight"])
                 if packs:
                     (amount, unit), _ = packs.most_common(1)[0]
                     quantity, note = _format(amount, unit), "cantitate ghicită (ambalajul obișnuit)"

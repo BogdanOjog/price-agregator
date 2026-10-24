@@ -30,14 +30,31 @@ stores:
     source_mode: catalog
     visitable: true
 
-  - slug: lidl_aurelia_nord
+  # The Lidl the user shops at (2026-10-24): Ghezzano, comune of San Giuliano Terme, outside Pisa by
+  # the user's decision. Weekly offers come from lidl.it (region 600); the whole catalog with
+  # Everli's prices from its Everli storefront (store 5390), labelled "preț online ... (Everli)".
+  - slug: lidl_ghezzano
     chain: lidl
-    name: Lidl Via Aurelia Nord
-    address: Via Aurelia Nord 4
-    cap: "56122"
-    external_id: null           # no public id; confirmed at /s/it-IT/ricerca-negozio/pisa-pi/via-aurelia-nord-4/
-    source_mode: promo_only
+    name: Lidl Ghezzano
+    address: Via Lorenzo il Magnifico 24, San Giuliano Terme
+    cap: "56010"
+    external_id: null           # lidl.it publishes no store id
+    source_mode: catalog
     visitable: true
+    outside_scope_approved: true
+    price_source: lidl_everli_ghezzano
+
+  - slug: lidl_everli_ghezzano
+    chain: lidl
+    name: Lidl Ghezzano (Everli)
+    address: Via Lorenzo il Magnifico 24, San Giuliano Terme
+    cap: "56010"
+    external_id: "5390"         # store id Everli assigns to this address (/api/config)
+    source_mode: catalog
+    visitable: false            # data source only: Everli's prices may include its markup
+    outside_scope_approved: true
+    everli_address: {street: Via Lorenzo il Magnifico, street_number: "24", postal_code: "56010",
+                     city: San Giuliano Terme, lat: 43.7220276, lng: 10.4281323}
 
   # Two Eurospin stores exist in Pisa with the same offers; the user chose either (T0.7),
   # so only one is kept. The other: Via del Chiassatello 28, data-store-id 480616.

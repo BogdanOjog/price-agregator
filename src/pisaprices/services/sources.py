@@ -29,7 +29,10 @@ def build_collector(source: Source, config: AppConfig, root: Path) -> Collector:
         return ConadCatalog(_store(config, Chain.CONAD), categories, tolerance, root / "data" / "conad_session.txt")
     if source is Source.LIDL_OFFERS:
         from pisaprices.ingest.sources.lidl_offers import LidlOffers
-        return LidlOffers(_store(config, Chain.LIDL), categories)
+        return LidlOffers(_store(config, Chain.LIDL, visitable=True), categories)
+    if source is Source.LIDL_EVERLI:
+        from pisaprices.ingest.sources.lidl_everli import LidlEverli
+        return LidlEverli(_store(config, Chain.LIDL, visitable=False), categories)
     if source is Source.EUROSPIN_OFFERS:
         from pisaprices.ingest.sources.eurospin_offers import EurospinOffers
         return EurospinOffers(_store(config, Chain.EUROSPIN), categories)

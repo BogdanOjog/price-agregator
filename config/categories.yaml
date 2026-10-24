@@ -3,6 +3,7 @@
 #
 # sources: category keys per collector, on a category or on a group.
 #   conad_catalog / coop_catalog: the collector requests exactly these category pages.
+#   lidl_everli: Everli tag paths "top/mid/leaf" (lidl.everli.com); the collector requests each top tag once.
 #   lidl_offers / eurospin_offers: the coarse offer categories (Lidl: wonCategoryPrimary prefix;
 #     Eurospin: by_category code). On a group: every category of the group is a candidate.
 # A product's category, among the candidates of its site key (ingest/categories.py):
@@ -36,6 +37,7 @@ categories:
   sources:
     conad_catalog: ['1002', '1003']
     coop_catalog: [gastronomia-e-piatti-pronti/pasta-fresca]
+    lidl_everli: [12/100151, 12/100152]
   title_rules:
     include: [gnocchi, tortellini, tortelloni, ravioli, cappelletti, agnolotti, pasta fresca, pasta ripiena, pansotti]
     exclude: [surgel, cioccolat]
@@ -47,6 +49,7 @@ categories:
   sources:
     conad_catalog: ['1001']
     coop_catalog: [alimenti-in-scatola-e-confezionati/pasta-e-riso/pasta-all'uovo]
+    lidl_everli: [12/100162/461]
   title_rules:
     include: [pasta all'uovo, tagliatelle, fettuccine, pappardelle, lasagne, tagliolini, tajarin]
     exclude: [fresca, fresche, ripien, pronte]
@@ -58,6 +61,7 @@ categories:
   sources:
     conad_catalog: ['1004', '1006']
     coop_catalog: [alimenti-in-scatola-e-confezionati/pasta-e-riso/pasta-di-semola]
+    lidl_everli: [12/100162/458, 12/100162/459, 12/100162/460, 12/100162/462]
   title_rules:
     include: [pasta, spaghetti, penne, fusilli, rigatoni, linguine, maccheroni, farfalle, mezze maniche, paccheri, tortiglioni, bucatini, 
         orecchiette, conchiglie, ditalini, sedanini, pipe, gemelli, trofie, strozzapreti, casarecce, mafalde, vermicelli, capellini, 
@@ -71,6 +75,7 @@ categories:
   sources:
     conad_catalog: ['1005']
     coop_catalog: [alimenti-in-scatola-e-confezionati/pasta-e-riso/riso]
+    lidl_everli: [12/100312]
   title_rules:
     include: [riso, carnaroli, arborio, basmati, vialone, parboiled]
     exclude: [gallett, soffiat, bevanda, latte di riso, cracker]
@@ -84,6 +89,7 @@ categories:
     coop_catalog: [frutta-verdura-e-legumi/verdura-legumi-e-cereali-secchi/farro, 
         frutta-verdura-e-legumi/verdura-legumi-e-cereali-secchi/orzo-perlato, 
         frutta-verdura-e-legumi/verdura-legumi-e-cereali-secchi/mais-secco]
+    lidl_everli: [12/101654]
   title_rules:
     include: [farro, orzo perlato, cous cous, couscous, quinoa, bulgur, miglio, grano saraceno, avena]
     exclude: [fiocchi, biscott, bevanda]
@@ -97,6 +103,7 @@ categories:
     coop_catalog: [alimenti-in-scatola-e-confezionati/farina, alimenti-in-scatola-e-confezionati/basi-per-preparazioni, 
         alimenti-in-scatola-e-confezionati/pane-grattugiato-e-semolini, pane-e-pasticceria/pasticceria/basi-per-pasticceria-e-guarnizioni, 
         pane-e-pasticceria/pasticceria/ingredienti-e-preparati-per-dolci]
+    lidl_everli: [8/100304, 12/100316, '28']
   title_rules:
     include: [farina, lievito, pangrattato, pane grattugiato, semola, semolino, polenta, preparato per, pasta sfoglia, pasta frolla, pasta 
         brisè, pasta brise, decorazioni, codette, vanillina, fecola, amido, maizena]
@@ -122,6 +129,7 @@ categories:
         pane-e-pasticceria/sostituti-del-pane/pane-da-tramezzino, pane-e-pasticceria/sostituti-del-pane/panetti, 
         pane-e-pasticceria/sostituti-del-pane/panificati-da-cuocere, pane-e-pasticceria/sostituti-del-pane/altri-morbidi-e-da-farcire, 
         pane-e-pasticceria/sostituti-del-pane/pane-da-bruschetta]
+    lidl_everli: [8/100300/351, 8/100308]
   title_rules:
     include: [pane, panini, panino, pancarrè, pancarre, baguette, bauletto, ciabatt, rosetta, filone, bocconcini di pane, tramezzino, toast, 
         hot dog, burger buns, buns]
@@ -136,6 +144,7 @@ categories:
     coop_catalog: [pane-e-pasticceria/pizze-e-focacce, pane-e-pasticceria/sostituti-del-pane/piadine, 
         pane-e-pasticceria/sostituti-del-pane/tigelle, alimenti-in-scatola-e-confezionati/preparati-salati/piadine, 
         alimenti-in-scatola-e-confezionati/preparati-salati/pinse]
+    lidl_everli: [8/100300/354, 8/100306]
   title_rules:
     include: [pizza, pizze, pizzette, focacc, piadin, pinsa, pinse, tigell, crescia, schiacciat]
     exclude: [surgel]
@@ -150,6 +159,7 @@ categories:
         pane-e-pasticceria/sostituti-del-pane/gallette, pane-e-pasticceria/sostituti-del-pane/grissini, 
         pane-e-pasticceria/sostituti-del-pane/taralli, pane-e-pasticceria/sostituti-del-pane/altri-sostituti-del-pane, 
         pane-e-pasticceria/sostituti-del-pane/specialita'-tipiche-e-regionali, pane-e-pasticceria/sostituti-del-pane/schiacciatine]
+    lidl_everli: [8/100302]
   title_rules:
     include: [cracker, grissin, gallett, crostin, taralli, tarallini, friselle, carasau, fette tostate, bruschett, sfogliatine]
     exclude: []
@@ -162,6 +172,7 @@ categories:
     conad_catalog: ['0903']
     coop_catalog: [dolciumi-chewingum-e-snack/snack-salati/patatine, dolciumi-chewingum-e-snack/snack-salati/pop-corn, 
         dolciumi-chewingum-e-snack/snack-salati/salatini, dolciumi-chewingum-e-snack/snack-salati/snack-vari]
+    lidl_everli: [11/100171/550, 11/100171/551, 11/100171/553]
   title_rules:
     include: [patatine, chips, popcorn, pop corn, salatini, snack salat, tortilla, nachos, pretzel, stuzzichini, vol-au-vent, rustici]
     exclude: [surgel]
@@ -181,6 +192,7 @@ categories:
   sources:
     conad_catalog: []
     coop_catalog: [uova-latte-e-latticini/bevande-vegetali]
+    lidl_everli: [6/100140]
   title_rules:
     include: [bevanda di, bevanda vegetale, drink, bevanda alla, bevanda all']
     exclude: []
@@ -192,6 +204,7 @@ categories:
   sources:
     conad_catalog: ['0404']
     coop_catalog: [uova-latte-e-latticini/latte]
+    lidl_everli: [6/100139]
   title_rules:
     include: [latte]
     exclude: [condensato, cioccolat, panna, fermentat, yogurt, kefir, budino, dessert, biscott, in polvere, latte di cocco, snack, burro, 
@@ -204,6 +217,7 @@ categories:
   sources:
     conad_catalog: ['0403']
     coop_catalog: [uova-latte-e-latticini/yogurt-e-dessert]
+    lidl_everli: [6/100144]
   title_rules:
     include: [yogurt, yog, kefir, budino, budini, dessert, panna cotta, skyr, creme caramel, crème caramel]
     exclude: []
@@ -215,6 +229,7 @@ categories:
   sources:
     conad_catalog: ['0402']
     coop_catalog: [uova-latte-e-latticini/burro-e-margarina]
+    lidl_everli: [6/100294/323, 6/100294/324]
   title_rules:
     include: [burro, margarina]
     exclude: [burro di arachidi, biscott, cacao]
@@ -226,6 +241,7 @@ categories:
   sources:
     conad_catalog: ['0405']
     coop_catalog: [uova-latte-e-latticini/panna-e-besciamella]
+    lidl_everli: [6/100294/326, 6/100294/327, 6/100294/325]
   title_rules:
     include: [panna, besciamella]
     exclude: [gelat, panna cotta]
@@ -243,6 +259,7 @@ categories:
         salumi-e-formaggi/formaggi-confezionati/altri-formaggi-freschi, salumi-e-formaggi/formaggi-al-banco/formaggi-freschi, 
         salumi-e-formaggi/formaggi-al-banco/ricotta, salumi-e-formaggi/formaggi-al-banco/crescenze-stracchini-e-squacquerone, 
         salumi-e-formaggi/formaggi-al-banco/caprini]
+    lidl_everli: [4/109961/295, 4/109961/294, 4/109961/290, 4/109961/298, 4/109961/282, 4/109961/297, 4/109961/288, 6/100294/6004]
   title_rules:
     include: [mozzarell, ricott, robiola, mascarpone, crescenza, stracchino, squacquerone, burrata, stracciatella, caprino, fiocchi di latte,
       philadelphia, formaggio fresco, formaggio spalmabile, primosale, feta, fior di latte, bufala, quark, spalmabile]
@@ -258,6 +275,8 @@ categories:
         salumi-e-formaggi/formaggi-confezionati/formaggi-grattugiati, salumi-e-formaggi/formaggi-confezionati/formaggi-a-fette, 
         salumi-e-formaggi/formaggi-confezionati/bocconcini-stick-fette-e-scaglie, salumi-e-formaggi/formaggi-confezionati/formaggi-fusi, 
         salumi-e-formaggi/formaggi-al-banco/formaggi-stagionati, salumi-e-formaggi/formaggi-al-banco/altri-formaggi]
+    lidl_everli: [4/100118, 4/109961/284, 4/109961/291, 4/109961/285, 4/109961/283, 4/109961/286, 4/109961/296, 4/109961/289, 4/109961/293, 
+        4/109961/287, 4/109961/299]
   title_rules:
     include: [grana, parmigian, pecorino, provolone, asiago, fontina, emmental, gorgonzola, taleggio, formaggio, formaggi, scamorza, 
         montasio, sottilette, edamer, gouda, cheddar, brie, camembert, groviera, caciotta, caciocavallo, provola, fontal, toma, bitto, 
@@ -272,6 +291,7 @@ categories:
   sources:
     conad_catalog: ['0406', '0506']
     coop_catalog: [uova-latte-e-latticini/uova]
+    lidl_everli: [6/100294/329]
   title_rules:
     include: [uova, uovo]
     exclude: [pasta, cioccolat, pasqua, sorpres]
@@ -291,6 +311,7 @@ categories:
   sources:
     conad_catalog: ['0209']
     coop_catalog: [carne/macinati, carne/pronti-da-cuocere]
+    lidl_everli: [1/100102/105538, 1/109959/105544, 1/109959/213]
   title_rules:
     include: [macinat, hamburger, burger, salsicc, polpett, spiedin, cotolett, involtin, svizzer, cevapcici, arrosticini]
     exclude: [veg]
@@ -302,6 +323,7 @@ categories:
   sources:
     conad_catalog: ['0201', '0202']
     coop_catalog: [carne/bovino]
+    lidl_everli: [1/100278]
   title_rules:
     include: [bovino, manzo, vitell, scottona, vitellone, bistecc, fettine, roast beef, spezzatino, ossobuc, fiorentina, tagliata, carpaccio,
       filetto di bovino, lombata, girello, noce di]
@@ -314,6 +336,7 @@ categories:
   sources:
     conad_catalog: ['0203']
     coop_catalog: [carne/suino]
+    lidl_everli: [1/100103]
   title_rules:
     include: [suino, maiale, braciol, costine, costolette di suino, arista, filetto di suino, lonza di suino, capocollo fresco]
     exclude: []
@@ -325,6 +348,7 @@ categories:
   sources:
     conad_catalog: ['0204']
     coop_catalog: [carne/pollo-tacchino-e-coniglio/pollo, carne/pollo-tacchino-e-coniglio/tacchino]
+    lidl_everli: [1/100102/206, 1/100102/205]
   title_rules:
     include: [pollo, tacchino, petto, cosce, sovracosce, fusi, alette, ali di pollo, galletto]
     exclude: []
@@ -336,6 +360,7 @@ categories:
   sources:
     conad_catalog: ['0205', '0207']
     coop_catalog: [carne/equino, carne/ovino, carne/razze-tipiche, carne/altre-carni-bianche, carne/pollo-tacchino-e-coniglio/coniglio]
+    lidl_everli: [1/100280]
   title_rules:
     include: [agnello, coniglio, cavallo, equino, faraona, anatra, ovino, capretto, struzzo, cinghiale]
     exclude: []
@@ -349,6 +374,7 @@ categories:
     coop_catalog: [carne/piatti-pronti, alimenti-in-scatola-e-confezionati/salumi-precotti, 
         alimenti-in-scatola-e-confezionati/pesce-e-carne-in-scatola/carne-con-gelatina, 
         alimenti-in-scatola-e-confezionati/pesce-e-carne-in-scatola/carne-senza-gelatina, salumi-e-formaggi/salumi-confezionati/wurstel]
+    lidl_everli: [1/109959/312, 1/109959/212, 27/100168/520]
   title_rules:
     include: [wurstel, würstel, cotechino, zampone, carne in scatola, carne in gelatina, stinco, frankfurter]
     exclude: []
@@ -366,6 +392,7 @@ categories:
         salumi-e-formaggi/salumi-confezionati/prosciutto-cotto, salumi-e-formaggi/salumi-confezionati/prosciutto-crudo, 
         salumi-e-formaggi/salumi-confezionati/salame-e-salsiccia, salumi-e-formaggi/salumi-confezionati/salamini-snack-per-aperitivi, 
         salumi-e-formaggi/salumi-confezionati/speck]
+    lidl_everli: [4/109963]
   title_rules:
     include: [prosciutt, salame, salami, mortadell, bresaola, speck, coppa, pancetta, guanciale, lonzino, affettat, porchetta, culatello, 
         lardo, fesa di tacchino, salumi, cacciatorini, finocchiona, nduja, "'nduja"]
@@ -386,6 +413,7 @@ categories:
   sources:
     conad_catalog: ['0305', '0809']
     coop_catalog: [alimenti-in-scatola-e-confezionati/pesce-e-carne-in-scatola/tonno, pesce/pesce-conservato]
+    lidl_everli: [27/100168/521, 27/100168/522, 27/100168/523]
   title_rules:
     include: [tonno]
     exclude: [fresco, trancio di tonno fresco, sugo]
@@ -400,6 +428,7 @@ categories:
         alimenti-in-scatola-e-confezionati/pesce-e-carne-in-scatola/altro-pesce-in-scatola, 
         alimenti-in-scatola-e-confezionati/pesce-e-carne-in-scatola/molluschi-e-crostacei, 
         alimenti-in-scatola-e-confezionati/pesce-e-carne-in-scatola/salmone, pesce/pesce-conservato]
+    lidl_everli: [27/100168/524, 27/100168/526, 27/100168/527, 27/100168/528]
   title_rules:
     include: [sgombr, sardin, alici, acciugh, filetti di, salmone in scatola, polpa di granchio, surimi, bottarga, aringh]
     exclude: []
@@ -411,6 +440,7 @@ categories:
   sources:
     conad_catalog: ['0303']
     coop_catalog: [pesce/molluschi-e-crostacei]
+    lidl_everli: [1/100288/229]
   title_rules:
     include: [gamber, cozz, vongol, calamar, seppi, polpo, totani, scampi, mazzancoll, crostace, mollusch, frutti di mare]
     exclude: [surgel, scatola]
@@ -423,6 +453,7 @@ categories:
     conad_catalog: ['0301', '0302']
     coop_catalog: [pesce/pesci-interi-e-eviscerati, pesce/tranci-e-filetti, pesce/pesce-confezionato, pesce/pesce-preparato, 
         pesce/pesce-crudo-e-sushi, pesce/pesce-congelato-e-decongelato]
+    lidl_everli: [1/100284, 1/100288/6223, 1/100288/228]
   title_rules:
     include: [salmone, merluzz, orata, branzin, spigola, trota, pesce spada, filett, sushi, baccal, platessa, sogliola, nasello, rana 
         pescatrice, palombo, tonno fresco, pesce]
@@ -444,6 +475,7 @@ categories:
     conad_catalog: ['0101']
     coop_catalog: [frutta-verdura-e-legumi/frutta-fresca, frutta-verdura-e-legumi/frutta-esotica, 
         frutta-verdura-e-legumi/frutta-pronta/frutta-tagliata]
+    lidl_everli: [3/100112/251, 3/100112/252, 3/100112/254]
   title_rules:
     include: [mel, pere, banan, aranc, clementin, mandarin, kiwi, uva, ananas, melagran, mirtill, fragol, limon, pesche, albicocc, susin, 
         prugn, cachi, fichi, frutti di bosco, melone, anguria, lampon, ciliegi, avocado, mango, papaya, pompelm, nettarin, lime, castagne, 
@@ -458,6 +490,7 @@ categories:
   sources:
     conad_catalog: ['0103']
     coop_catalog: [frutta-verdura-e-legumi/verdura-pronta]
+    lidl_everli: [3/100272]
   title_rules:
     include: [insalat, misticanza, valeriana, songino, lattughino, rucola, spinacino, pronte da cuocere, verdure grigliate]
     exclude: [russa]
@@ -469,6 +502,7 @@ categories:
   sources:
     conad_catalog: ['0103']
     coop_catalog: [frutta-verdura-e-legumi/patate-e-funghi/patate]
+    lidl_everli: [3/100113/268]
   title_rules:
     include: [patate, patata]
     exclude: [surgel, chips, patatine, fritte, gnocchi, crocchett]
@@ -481,6 +515,7 @@ categories:
     conad_catalog: ['0103', '0105']
     coop_catalog: [frutta-verdura-e-legumi/verdura-fresca, frutta-verdura-e-legumi/legumi-freschi, 
         frutta-verdura-e-legumi/patate-e-funghi/funghi]
+    lidl_everli: [3/100113/260, 3/100113/264, 3/100113/261, 3/100113/258, 3/100113/267]
   title_rules:
     include: [broccol, carot, zucchin, pomodor, lattug, spinac, cavol, cipoll, aglio, finocch, melanzan, peperon, sedano, zucca, cetriol, 
         funghi, champignon, fagiolini, radicchio, carciof, asparag, porri, bietol, verza, cime di rapa, verdur, basilico, prezzemolo, 
@@ -497,6 +532,7 @@ categories:
     coop_catalog: [frutta-verdura-e-legumi/frutta-secca-e-disidratata, dolciumi-chewingum-e-snack/snack-salati/frutta-secca-tostata, 
         frutta-verdura-e-legumi/verdura-legumi-e-cereali-secchi/semi-di-zucca, 
         frutta-verdura-e-legumi/verdura-legumi-e-cereali-secchi/semi-vari]
+    lidl_everli: [3/100276, 11/100171/552]
   title_rules:
     include: [noci, mandorl, nocciol, pistacch, anacard, arachid, frutta secca, datteri, uvetta, uva sultanina, prugne secche, fichi secchi, 
         semi, frutta disidratata, albicocche secche, mix di frutta, pinoli, noci pecan, macadamia]
@@ -516,6 +552,7 @@ categories:
         frutta-verdura-e-legumi/verdura-legumi-e-cereali-secchi/legumi-misti, 
         frutta-verdura-e-legumi/verdura-legumi-e-cereali-secchi/lenticchie, frutta-verdura-e-legumi/verdura-legumi-e-cereali-secchi/piselli, 
         frutta-verdura-e-legumi/verdura-legumi-e-cereali-secchi/altri-legumi-e-cereali-secchi]
+    lidl_everli: [27/100170/540]
   title_rules:
     include: [lenticchi, ceci, fagioli, fave, piselli secchi, legumi, cicerchie, lupini]
     exclude: [lessat, cotti, scatola, al naturale, pronti, in vetro, latta, surgel, freschi]
@@ -535,6 +572,7 @@ categories:
   sources:
     conad_catalog: ['0804']
     coop_catalog: [olio-sughi-e-condimenti/conserve/conserve-di-pomodoro]
+    lidl_everli: [27/100160/450, 27/100160/451, 27/100160/452, 27/100160/453]
   title_rules:
     include: [passata, pelati, polpa, pomodorini, concentrato, triplo concentrato, datterini in, pomodori pelati, pomodoro]
     exclude: [sugo, ragù, ragu, pesto, secchi]
@@ -547,6 +585,7 @@ categories:
     conad_catalog: ['0804']
     coop_catalog: [olio-sughi-e-condimenti/condimenti-pronti/sughi-e-ragu', olio-sughi-e-condimenti/condimenti-pronti/pesti-e-battuti, 
         olio-sughi-e-condimenti/condimenti]
+    lidl_everli: [27/100160/454, 27/100160/387]
   title_rules:
     include: [sugo, sughi, ragù, ragu, pesto, battuto, salsa di pomodoro, amatriciana, arrabbiata, puttanesca, carbonara, salsa pronta]
     exclude: []
@@ -558,6 +597,7 @@ categories:
   sources:
     conad_catalog: ['0807']
     coop_catalog: [olio-sughi-e-condimenti/conserve/conserve-di-verdure-e-legumi]
+    lidl_everli: [27/100170/541]
   title_rules:
     include: [ceci, fagioli, lenticchie, piselli, legumi, borlotti, cannellini, fave]
     exclude: [secch]
@@ -569,6 +609,7 @@ categories:
   sources:
     conad_catalog: ['0806']
     coop_catalog: [alimenti-in-scatola-e-confezionati/sottoli-e-sottaceti, frutta-verdura-e-legumi/olive]
+    lidl_everli: [27/100166]
   title_rules:
     include: [olive, sottol, sott'olio, sottacet, sott'aceto, capperi, cetriolini, giardiniera, carciofini, pomodori secchi, funghi 
         trifolati, peperoni in, lampascioni, friggitelli]
@@ -582,6 +623,7 @@ categories:
     conad_catalog: ['0106', '0807', '0808']
     coop_catalog: [colazione/conserve-di-frutta, frutta-verdura-e-legumi/frutta-pronta/composte-di-frutta, 
         olio-sughi-e-condimenti/conserve/conserve-di-verdure-e-legumi]
+    lidl_everli: [3/100112/257, 27/100170/542, 27/100170/543]
   title_rules:
     include: [mais, frutta sciroppata, sciropp, macedonia, pesche sciroppate, composta, purea, verdure grigliate, funghi champignon, spinaci
         in, mais dolce, barbabietole]
@@ -602,6 +644,7 @@ categories:
   sources:
     conad_catalog: ['0801']
     coop_catalog: [olio-sughi-e-condimenti/olio/olio-di-olive]
+    lidl_everli: [27/100165/490, 27/100165/491]
   title_rules:
     include: [olio extravergine, olio extra vergine, olio evo, extravergine, extra vergine]
     exclude: [corpo, viso, solare, spray]
@@ -613,6 +656,7 @@ categories:
   sources:
     conad_catalog: ['0801']
     coop_catalog: [olio-sughi-e-condimenti/olio/olio-di-semi, olio-sughi-e-condimenti/olio/olio-di-olive]
+    lidl_everli: [27/100165/492, 27/100165/493]
   title_rules:
     include: [olio, friol, tuttifritti, frittura]
     exclude: [extravergine, extra vergine, evo, corpo, viso, solare, motore, staccante]
@@ -624,6 +668,7 @@ categories:
   sources:
     conad_catalog: ['0801']
     coop_catalog: [olio-sughi-e-condimenti/aceto]
+    lidl_everli: [27/100165/494, 27/100165/495]
   title_rules:
     include: [aceto]
     exclude: []
@@ -635,6 +680,7 @@ categories:
   sources:
     conad_catalog: ['0802']
     coop_catalog: [olio-sughi-e-condimenti/pepe-sale-e-spezie, frutta-verdura-e-legumi/verdura-legumi-e-cereali-secchi/aromi-secchi]
+    lidl_everli: [27/100165/498, 27/100165/6009, 27/100161/496, 27/100161/499]
   title_rules:
     include: [sale, pepe, spezie, origano, peperoncino, rosmarino, zafferano, curry, paprika, cannella, noce moscata, aromi, erbe aromatiche,
       aroma, salvia, timo, cumino, curcuma, zenzero in polvere, chiodi di garofano, alloro]
@@ -647,6 +693,7 @@ categories:
   sources:
     conad_catalog: ['0803']
     coop_catalog: [olio-sughi-e-condimenti/preparati-brodo-e-insaporitori]
+    lidl_everli: [27/100161/456, 27/100161/214]
   title_rules:
     include: [dado, dadi, brodo, granulare, insaporitore, preparato per brodo, estratto di carne]
     exclude: []
@@ -659,6 +706,7 @@ categories:
     conad_catalog: ['0805', '0801']
     coop_catalog: [olio-sughi-e-condimenti/salse, olio-sughi-e-condimenti/succo-di-limone, 
         olio-sughi-e-condimenti/condimenti-pronti/per-insalate-e-piatti-freddi]
+    lidl_everli: [27/100167, 27/100175]
   title_rules:
     include: [maionese, ketchup, senape, salsa, salse, glassa, succo di limone, tartare, condimento, mostarda, guacamole, hummus, crema di, 
         patè, pate, salsina, barbecue, worcester, soia]
@@ -681,6 +729,7 @@ categories:
   sources:
     conad_catalog: ['0702']
     coop_catalog: [colazione/caffe'-in-capsule-e-cialde]
+    lidl_everli: [10/100156/109951, 10/100156/415]
   title_rules:
     include: [capsul, ciald]
     exclude: []
@@ -692,6 +741,7 @@ categories:
   sources:
     conad_catalog: ['0701', '0703', '0704']
     coop_catalog: [colazione/caffe']
+    lidl_everli: [10/100156/413, 10/100156/414, 10/100156/416, 10/100156/418]
   title_rules:
     include: [caffè, caffe, espresso, miscela]
     exclude: [capsul, ciald, orzo, biscott, cioccolat, gelat, yogurt, liquore]
@@ -703,6 +753,7 @@ categories:
   sources:
     conad_catalog: ['0705', '0706', '0707']
     coop_catalog: [colazione/the-infusi-e-preparati]
+    lidl_everli: [10/100156/419, 10/100328]
   title_rules:
     include: [tè, the, tisan, infus, camomill, orzo solubile, orzo, karkadè, rooibos, matcha]
     exclude: [freddo, fredda, pesca, limone]
@@ -714,6 +765,7 @@ categories:
   sources:
     conad_catalog: ['0601']
     coop_catalog: [colazione/biscotti-e-wafer]
+    lidl_everli: [11/100155]
   title_rules:
     include: [biscott, frollin, wafer, savoiardi, cookies, amaretti, cantucci, krumiri, brutti ma buoni, ricciarelli, baci di dama, 
         pasticcini, tarallucci, macine, pavesini, digestive]
@@ -726,6 +778,7 @@ categories:
   sources:
     conad_catalog: ['0605']
     coop_catalog: [colazione/fette-biscottate]
+    lidl_everli: [11/101348]
   title_rules:
     include: [fette biscottate, fette tostate, fette integrali]
     exclude: []
@@ -737,6 +790,7 @@ categories:
   sources:
     conad_catalog: ['0603']
     coop_catalog: [colazione/cereali]
+    lidl_everli: [11/100154, 11/100338/404]
   title_rules:
     include: [cereali, muesli, granola, corn flakes, cornflakes, fiocchi d'avena, fiocchi di, barrett]
     exclude: []
@@ -748,6 +802,7 @@ categories:
   sources:
     conad_catalog: ['0604']
     coop_catalog: [colazione/marmellate-e-confetture, colazione/miele, colazione/creme-spalmabili]
+    lidl_everli: [11/100157]
   title_rules:
     include: [marmellat, confettur, miele, crema spalmabile, crema di nocciol, crema alla nocciola, nutella, crema al cacao, spalmabile al, 
         burro di arachidi, crema di pistacchio, composta di]
@@ -763,6 +818,7 @@ categories:
         pane-e-pasticceria/pasticceria/pasticceria-da-forno, pane-e-pasticceria/pasticceria/pasticceria-fresca, 
         pane-e-pasticceria/pasticceria/pasticceria-secca, pane-e-pasticceria/pasticceria/snack-dolci, 
         pane-e-pasticceria/pasticceria/torte-pronte]
+    lidl_everli: [8/100300/359, 11/100334, 11/100338/433]
   title_rules:
     include: [merendin, torta, torte, crostat, cornett, croissant, brioche, plumcake, pan di spagna, ciambell, muffin, panettone, pandoro, 
         colomba, strudel, snack al latte, sbrisolona, pasticciott, sfogliatell, cannol, bign, tortine, saccottin, flauti, girell, kinder, 
@@ -777,6 +833,7 @@ categories:
     conad_catalog: ['0602']
     coop_catalog: [dolciumi-chewingum-e-snack/caramelle-con-zucchero, dolciumi-chewingum-e-snack/caramelle-senza-zucchero, 
         dolciumi-chewingum-e-snack/dolciumi-al-cioccolato, dolciumi-chewingum-e-snack/gomme-da-masticare]
+    lidl_everli: [11/100158, 11/100336, 11/100159]
   title_rules:
     include: [cioccolat, caramell, gomm, chewing, pralin, tavolett, ovetto, confett, liquirizia, cioccolatini, lecca, marshmallow, torrone, 
         dolci, gommose, boeri, uovo di pasqua, ovetti]
@@ -789,6 +846,7 @@ categories:
   sources:
     conad_catalog: ['0504']
     coop_catalog: [colazione/zucchero-e-dolcificanti]
+    lidl_everli: [10/100332]
   title_rules:
     include: [zucchero, dolcificant, stevia, fruttosio, eritritolo, saccarina, sciroppo d'agave]
     exclude: [senza zucchero]
@@ -808,6 +866,7 @@ categories:
   sources:
     conad_catalog: ['1102', '1104']
     coop_catalog: [surgelati-e-gelati/pesce]
+    lidl_everli: [15/100183]
   title_rules:
     include: [merluzz, gamber, calamar, bastoncini, pesce, filett, salmone, polpo, seppi, vongol, cozz, frutti di mare, platessa, sogliola, 
         totan, misto mare, mazzancoll, nasello, halibut, persico, code di]
@@ -820,6 +879,7 @@ categories:
   sources:
     conad_catalog: ['1107']
     coop_catalog: [surgelati-e-gelati/patate-surgelate]
+    lidl_everli: [15/100181/593]
   title_rules:
     include: [patate, patatine, fritte, crocchette di patate, rosti, rösti, chips]
     exclude: []
@@ -831,6 +891,8 @@ categories:
   sources:
     conad_catalog: ['1107']
     coop_catalog: [surgelati-e-gelati/verdure-e-minestroni, surgelati-e-gelati/odori, surgelati-e-gelati/frutta]
+    lidl_everli: [15/100181/597, 15/100181/590, 15/100181/6047, 15/100181/592, 15/100181/6230, 15/100181/591, 15/100181/595, 15/100181/6229, 
+        15/100181/594]
   title_rules:
     include: [spinac, piselli, minestron, fagiolini, verdur, broccol, funghi, porcini, carciof, frutti di bosco, zuppa, odori, soffritto, 
         cavolfior, zucchine, bieta, cime di rapa, friariell, edamame, mais, misto per, fragole, mirtilli]
@@ -843,6 +905,7 @@ categories:
   sources:
     conad_catalog: ['1108']
     coop_catalog: [surgelati-e-gelati/gelati]
+    lidl_everli: [15/100186]
   title_rules:
     include: [gelat, ghiaccio, sorbett, cono, coni, coppett, stecco, biscotto gelato, semifreddo, torta gelato, ghiaccioli, cornetto, magnum,
       mochi]
@@ -857,6 +920,7 @@ categories:
     coop_catalog: [surgelati-e-gelati/pane-pizze-e-focacce, surgelati-e-gelati/piatti-pronti-surgelati, surgelati-e-gelati/snack, 
         surgelati-e-gelati/pasta, surgelati-e-gelati/carne, surgelati-e-gelati/grigliati-panati, surgelati-e-gelati/preparati-di-pasticceria,
       surgelati-e-gelati/surgelati-senza-glutine]
+    lidl_everli: [15/100182, 15/100184]
   title_rules:
     include: [pizz, lasagn, panzerott, sofficin, crocchett, piatto, piatti, risotto, tortellini, ravioli, cotolett, arancin, focacc, calzon, 
         crepes, involtini primavera, nuggets, burger, hamburger, polpett, cordon bleu, paella, gnocchi, torta, sfoglia, vol-au-vent, mini, 
@@ -880,6 +944,7 @@ categories:
     coop_catalog: [gastronomia-e-piatti-pronti/piatti-pronti, gastronomia-e-piatti-pronti/gastronomia-veg, 
         gastronomia-e-piatti-pronti/panini-farciti, alimenti-in-scatola-e-confezionati/piatti-etnici, 
         alimenti-in-scatola-e-confezionati/snack-farciti, alimenti-in-scatola-e-confezionati/preparati-salati/altri-preparati-salati]
+    lidl_everli: [4/100148, 4/100314, '32', 1/100288/230, 27/100168/525]
   title_rules:
     include: [piatto, piatti, lasagn, insalata di, insalata russa, tramezzin, panin, zuppa, minestr, vellutat, risotto, sushi, pollo arrosto,
       parmigiana, burger veg, polpette di, cous cous con, insalatona, pokè, poke, wrap, crepes, cannelloni, arrosto, contorno, seitan, tofu, 
@@ -901,6 +966,7 @@ categories:
   sources:
     conad_catalog: ['1801']
     coop_catalog: [acqua-succhi-e-bibite/acque]
+    lidl_everli: [101366/100191]
   title_rules:
     include: [acqua]
     exclude: [tonica, acqua di cocco, acqua di rose, aromatizzat]
@@ -912,6 +978,7 @@ categories:
   sources:
     conad_catalog: ['1806']
     coop_catalog: [acqua-succhi-e-bibite/bibite/the-pronto]
+    lidl_everli: [101366/100188/670]
   title_rules:
     include: [tè freddo, te freddo, the freddo, the alla, tè alla, the al, tè al, ice tea, estathé, estathe, fuze]
     exclude: []
@@ -923,6 +990,7 @@ categories:
   sources:
     conad_catalog: ['1802']
     coop_catalog: [acqua-succhi-e-bibite/spremute-estratti-e-succhi, frutta-verdura-e-legumi/frutta-pronta/bevande-di-frutta]
+    lidl_everli: [101366/100187]
   title_rules:
     include: [succo, succhi, spremut, nettare, estratto, smoothie, frullato, centrifugat]
     exclude: []
@@ -936,6 +1004,8 @@ categories:
     coop_catalog: [acqua-succhi-e-bibite/bibite/bibite-alla-frutta, acqua-succhi-e-bibite/bibite/bibite-gassate, 
         acqua-succhi-e-bibite/bibite/energy-drink, acqua-succhi-e-bibite/bibite/integratori-salini, acqua-succhi-e-bibite/bibite/sciroppi, 
         acqua-succhi-e-bibite/bibite/preparati-per-bevande, acqua-succhi-e-bibite/bibite/bevande-benessere]
+    lidl_everli: [101366/100188/660, 101366/100188/661, 101366/100188/662, 101366/100188/663, 101366/100188/664, 101366/100188/6028, 
+        101366/100188/665]
   title_rules:
     include: [cola, aranciata, gassos, chinotto, tonica, energy, bibita, bevanda, bevande, limonata, sciropp, ginger, spuma, cedrata, acqua 
         tonica, isotonic, sport drink, red bull, monster]

@@ -55,6 +55,17 @@ class Settings(Strict):
 
 # stores.yaml -----------------------------------------------------------------------------------
 
+class EverliAddress(Strict):
+    """The store's own public address, sent to Everli so that it serves this store."""
+
+    street: str
+    street_number: str
+    postal_code: Annotated[str, StringConstraints(pattern=r"^\d{5}$")]
+    city: str
+    lat: float
+    lng: float
+
+
 class StoreConfig(Strict):
     slug: Slug
     chain: Chain
@@ -65,14 +76,13 @@ class StoreConfig(Strict):
     source_mode: SourceMode
     visitable: bool = True
     price_source: Slug | None = None
-    outside_scope_approved: bool = False
+    outside_scope_approved: bool = False   # outside Comune di Pisa by the user's decision
+    everli_address: EverliAddress | None = None
 
     @model_validator(mode="after")
     def _in_pisa(self) -> "StoreConfig":
         if int(self.cap) not in PISA_CAPS and not self.outside_scope_approved:
             raise ValueError(f"CAP {self.cap} is outside Comune di Pisa (56121-56128) and not approved")
-        if self.outside_scope_approved and self.visitable:
-            raise ValueError("a store outside Pisa may only be a data source (visitable: false)")
         return self
 
 

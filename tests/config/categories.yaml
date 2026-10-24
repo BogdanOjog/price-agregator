@@ -15,6 +15,7 @@ categories:
     sources:
       conad_catalog: ["0404"]
       coop_catalog: [dairy/milk]
+      lidl_everli: ["6/100139"]
       lidl_offers: ["Cibo e quasi cibo/Dairy"]
     title_rules:
       include: [latte]
@@ -33,6 +34,7 @@ categories:
     sources:
       coop_catalog: [pasta/semola]
       conad_catalog: ["1004"]
+      lidl_everli: ["12/100162"]
       lidl_offers: ["Cibo e quasi cibo/Pantry"]
       eurospin_offers: [/0006]
     title_rules:
