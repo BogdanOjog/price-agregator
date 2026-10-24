@@ -1,0 +1,4 @@
+curl --url 'https://spesaonline.conad.it/c/pasta-di-semola--1004' \
+  -H 'accept: text/html' \
+  -b 'ecSess=00000000-aaaa-bbbb-cccc-000000000000; ecRoute=.api-test; affinity="0123456789abcdef"; ecServerUUID=11111111-2222-3333-4444-555555555555; s_ecid=MCMID%7C1; ecAccess=header.payload.signature; ecCooperative=cno; AMCV_X=1' \
+  -H 'user-agent: Mozilla/5.0 (test)'

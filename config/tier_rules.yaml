@@ -1,0 +1,29 @@
+# PROPOSAL (T4.1) — to be approved by the user. Tier and flags of a product come only from these
+# rules: a product matched by no rule gets no tier (it still appears everywhere, but a shopping
+# list item with min_tier excludes it).
+#
+# tier: 1 = economy, 2 = standard, 3 = premium.
+# Rules are tried in order; the first matching `lines` rule sets the tier. Matching is
+# case-insensitive at the start of a word, on brand + product name.
+lines:
+  # private-label lines (seen in recon pages)
+  - {chain: conad, match: ["sapori & dintorni", "sapori e dintorni", "sapori & idee", "sapori e idee"], tier: 3}
+  - {chain: conad, match: ["bassi e fissi"], tier: 1}
+  - {chain: conad, match: ["verso natura", "piacersi", "alimentum"], tier: 2}
+  - {chain: conad, match: ["conad"], tier: 2}
+  - {chain: coop, match: ["fior fiore"], tier: 3}
+  - {chain: coop, match: ["coop", "vivi verde", "bene si", "bene sì", "solidal"], tier: 2}
+  - {chain: lidl, match: ["deluxe"], tier: 3}
+  - {chain: lidl, match: ["italiamo", "milbona", "favorina", "belbake", "solevita", "ryneczek lidla"], tier: 2}
+  - {chain: eurospin, match: ["amo essere"], tier: 3}
+  - {chain: eurospin, match: ["delizie dal sole", "tre mulini", "pascoli italiani", "land", "ondina", "dolciando", "mister sibamba"], tier: 2}
+# keywords that raise any product (private label or national brand) to premium
+premium_keywords: ["igp", "dop", "docg", "al bronzo", "trafilata al bronzo", "gragnano", "extra vergine", "extravergine"]
+# products of brands matched by no line (national brands such as Barilla, De Cecco, Mutti)
+other_brands_tier: 2
+# flags used by shopping list items (required_flags)
+flags:
+  bio: ["bio", "biologic"]
+  gluten_free: ["senza glutine", "gluten free"]
+  lactose_free: ["senza lattosio", "zymil", "delattosato"]
+  vegan: ["vegan", "vegetale"]

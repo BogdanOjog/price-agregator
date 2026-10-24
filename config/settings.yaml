@@ -1,0 +1,19 @@
+# Technical settings only. Personal values live in user.yaml.
+http:
+  min_delay_seconds: 3
+  timeout_seconds: 20
+  max_retries: 3
+  user_agent: "pisa-prices/0.1 (uz personal)"
+quality:
+  unit_price_tolerance: 0.02      # €/kg or €/l
+  anomaly_drop_ratio: 0.7         # below 70% of the previous run's products -> partial
+  fuzzy_match_threshold: 90       # rapidfuzz score for review proposals
+optimizer:
+  planning_window_days: 7
+  max_stores_k: 3
+  max_price_age_days: 14          # older prices: excluded from the optimizer, flagged in the catalog
+  expiry_warning_days: 1          # warn if a promotion ends <= 1 day after the shopping day
+  future_rewards_value: 0.0       # vouchers/points: 0 = excluded from cost
+paths:
+  raw: data/raw
+  db: data/pisa_prices.db

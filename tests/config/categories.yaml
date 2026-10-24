@@ -1,0 +1,40 @@
+# Test taxonomy.
+categories:
+  - slug: dairy
+    name: Dairy
+    parent:
+    selected: false
+    review: true
+    sources:
+      conad_catalog: ["04"]
+  - slug: milk
+    name: Milk
+    parent: dairy
+    selected: true
+    review: false
+    sources:
+      conad_catalog: ["0404"]
+      coop_catalog: [dairy/milk]
+      lidl_offers: ["Cibo e quasi cibo/Dairy"]
+    title_rules:
+      include: [latte]
+      exclude: [cioccolato]
+  - slug: eggs
+    name: Eggs
+    parent: dairy
+    selected: false
+    review: true
+    sources: {}
+  - slug: pasta
+    name: Pasta di semola
+    parent:
+    selected: true
+    review: false
+    sources:
+      coop_catalog: [pasta/semola]
+      conad_catalog: ["1004"]
+      lidl_offers: ["Cibo e quasi cibo/Pantry"]
+      eurospin_offers: [/0006]
+    title_rules:
+      include: [spaghetti, penne, fusilli, pasta di semola]
+      exclude: [fresca, ripien]

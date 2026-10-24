@@ -1,0 +1,51 @@
+# Store identity, synced into the DB by slug. Addresses come from directories and are
+# confirmed during recon (T0.3-T0.5); external_id is filled in at T0.4.
+stores:
+  - slug: coop_cisanello
+    chain: coop
+    name: Coop Cisanello
+    address: Via Manara Valgimigli 1-3
+    cap: "56124"
+    external_id: "001303"       # codicePuntoVendita on coopfirenze.it (flyers)
+    source_mode: catalog
+    visitable: true
+    price_source: coop_cascina  # regular prices only ("preț online Cascina")
+
+  - slug: coop_cascina
+    chain: coop
+    name: Coop Cascina (punto di ritiro)
+    address: Via del Fosso Vecchio
+    cap: "56012"
+    external_id: iestore34446   # storeId on prenotalaspesa (storePolygon 1253)
+    source_mode: catalog
+    visitable: false            # data source only
+    outside_scope_approved: true
+
+  - slug: conad_emanuele_filiberto
+    chain: conad
+    name: Conad Via Emanuele Filiberto
+    address: Via Emanuele Filiberto 9
+    cap: "56121"
+    external_id: "010529"       # anacanId on conad.it; Ordina e Ritira confirmed on the store page
+    source_mode: catalog
+    visitable: true
+
+  - slug: lidl_aurelia_nord
+    chain: lidl
+    name: Lidl Via Aurelia Nord
+    address: Via Aurelia Nord 4
+    cap: "56122"
+    external_id: null           # no public id; confirmed at /s/it-IT/ricerca-negozio/pisa-pi/via-aurelia-nord-4/
+    source_mode: promo_only
+    visitable: true
+
+  # Two Eurospin stores exist in Pisa with the same offers; the user chose either (T0.7),
+  # so only one is kept. The other: Via del Chiassatello 28, data-store-id 480616.
+  - slug: eurospin_da_morrona
+    chain: eurospin
+    name: Eurospin Via A. da Morrona
+    address: Via A. da Morrona 6
+    cap: "56121"                # eurospin.com shows the generic "56100"; 56121 from directories
+    external_id: "406298"       # data-store-id on eurospin.com
+    source_mode: promo_only
+    visitable: true

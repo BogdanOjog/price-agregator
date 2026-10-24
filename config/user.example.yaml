@@ -1,0 +1,24 @@
+# Copy to config/user.yaml and fill in your own values. config/user.yaml is not tracked by git.
+# Personal values only: the code never hardcodes a store, a day or a card.
+programs:                          # loyalty programs you hold (has_card) and how many cards
+  lidl_plus:           { has_card: false, n_cards: 1 }
+  eurospin_family:     { has_card: false, n_cards: 1 }
+  coop_socio:          { has_card: false, n_cards: 1 }
+  conad_carta_insieme: { has_card: false, n_cards: 1 }
+stores:                            # keys are the slugs in config/stores.yaml
+  coop_cisanello:
+    travel_minutes_one_way: 10
+    transport: walk                # walk | bike | bus | car
+  conad_emanuele_filiberto:
+    travel_minutes_one_way: 10
+    transport: walk
+    on_route_days: []              # days the store is on a trip you make anyway, e.g. [mon, thu]
+    detour_minutes: 0              # extra minutes on those days
+  lidl_aurelia_nord:
+    travel_minutes_one_way: 10
+    transport: walk
+    allowed_days: null             # null = any day; or e.g. [sat, sun]
+  eurospin_da_morrona:
+    travel_minutes_one_way: 10
+    transport: bus
+    transport_cost_eur: 0.0        # round-trip ticket, only for transport: bus

@@ -1,0 +1,21 @@
+# Test user: not the personal config.
+programs:
+  lidl_plus: { has_card: true, n_cards: 1 }
+  coop_socio: { has_card: false, n_cards: 1 }
+stores:
+  coop_a:
+    travel_minutes_one_way: 5   # walking
+    transport: walk
+  conad_a:
+    travel_minutes_one_way: 10
+    transport: walk
+    on_route_days: [tue]
+  lidl_a:
+    travel_minutes_one_way: 20
+    transport: bus
+    transport_cost_eur: 3.0
+    allowed_days: [sat]
+  eurospin_a:
+    travel_minutes_one_way: 30
+    transport: bus
+    transport_cost_eur: 4.0

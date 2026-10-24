@@ -1,0 +1,33 @@
+# Fictitious stores for tests.
+stores:
+  - slug: coop_a
+    chain: coop
+    name: Coop A
+    cap: "56124"
+    source_mode: catalog
+    price_source: coop_source   # regular prices from the data-only store
+  - slug: coop_source
+    chain: coop
+    name: Coop data source
+    cap: "56012"
+    external_id: iestore34446
+    source_mode: catalog
+    visitable: false
+    outside_scope_approved: true
+  - slug: conad_a
+    chain: conad
+    name: Conad A
+    cap: "56121"
+    external_id: "010529"
+    source_mode: catalog
+  - slug: lidl_a
+    chain: lidl
+    name: Lidl A
+    cap: "56122"
+    source_mode: promo_only
+  - slug: eurospin_a
+    chain: eurospin
+    name: Eurospin A
+    cap: "56121"
+    external_id: "406298"
+    source_mode: promo_only

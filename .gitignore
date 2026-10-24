@@ -1,0 +1,17 @@
+# local data, personal config, sessions, working notes
+CLAUDE.md
+PLAN.md
+data/
+config/user.yaml
+
+# Python / uv
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Content copied from the stores' websites stays local (public repo; Eurospin's terms forbid
+# redistribution). Tests use it when present and skip otherwise; tests/synthetic/ is committed.
+tests/fixtures/*
+!tests/fixtures/README.md
+recon/out/

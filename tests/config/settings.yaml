@@ -1,0 +1,18 @@
+http:
+  min_delay_seconds: 0.01
+  timeout_seconds: 5
+  max_retries: 3
+  user_agent: "pisa-prices-tests"
+quality:
+  unit_price_tolerance: 0.02
+  anomaly_drop_ratio: 0.7
+  fuzzy_match_threshold: 90
+optimizer:
+  planning_window_days: 7
+  max_stores_k: 3
+  max_price_age_days: 14
+  expiry_warning_days: 1
+  future_rewards_value: 0.0
+paths:
+  raw: data/raw
+  db: data/test.db
